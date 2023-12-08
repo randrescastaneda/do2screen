@@ -676,7 +676,7 @@ dom_2004_enft_v01_m_v03_a_sedlac_02
 bol_2006_eh_v01_m_v02_a_sedlac_02
 
 local using dom_2004_enft_v01_m_v03_a_sedlac_02.do
-do2screen using `using', var(ila)
+do2screen using `using', var(ila) nolinenumbers
 
 
 do2screen using test.do, var(edlev)
