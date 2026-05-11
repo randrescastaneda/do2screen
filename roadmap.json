@@ -1,4 +1,133 @@
 {
   "schemaVersion": "compound-gpid-roadmap-v1",
-  "milestones": []
+  "milestones": [
+    {
+      "id": "tested-modular-baseline",
+      "title": "Tested Modular Baseline",
+      "objective": "Preserve current behavior while making the codebase testable, auditable, and easier to extend.",
+      "status": "planned",
+      "features": [
+        {
+          "id": "regression-test-harness",
+          "title": "Build regression test harness for existing behavior",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "canonical-example-dofiles",
+          "title": "Create canonical example do-files covering current variables(), find(), and range() modes",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "modularize-internal-programs",
+          "title": "Split parsing, selection, display, and variable-tracing logic into smaller internal programs",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "document-supported-syntax",
+          "title": "Document current supported and unsupported syntax patterns",
+          "status": "idea",
+          "plan": null
+        }
+      ]
+    },
+    {
+      "id": "identification-logic-audit",
+      "title": "Identification Logic Audit",
+      "objective": "Strengthen the variable-derivation algorithm so it handles more Stata syntax reliably.",
+      "status": "planned",
+      "features": [
+        {
+          "id": "audit-regex-detection",
+          "title": "Audit current regex-based detection against generate, replace, egen, rename, drop, labels, loops, comments, and delimiters",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "edge-case-tests",
+          "title": "Add edge-case tests for comments, compound quotes, line continuations, #delimit ;, and nested expressions",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "unsupported-syntax-behavior",
+          "title": "Define expected behavior for ambiguous or unsupported syntax",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "trace-diagnostics",
+          "title": "Improve diagnostic messages when tracing fails or is incomplete",
+          "status": "idea",
+          "plan": null
+        }
+      ]
+    },
+    {
+      "id": "multi-file-frame-aware-tracing",
+      "title": "Multi-file and Frame-aware Tracing",
+      "objective": "Extend tracing from a single do-file and default frame to realistic multi-file Stata workflows.",
+      "status": "planned",
+      "features": [
+        {
+          "id": "ordered-multifile-tracing",
+          "title": "Support ordered multi-do-file tracing where a variable is created in one file and modified in later files",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "frame-aware-parsing",
+          "title": "Add frame-aware parsing for frame create, frame change, frame put, frlink, frget, and frame post patterns",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "lineage-across-files-frames",
+          "title": "Track variable lineage across file boundaries and frame context",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "multifile-frame-examples",
+          "title": "Add examples showing multi-file and frame workflows",
+          "status": "idea",
+          "plan": null
+        }
+      ]
+    },
+    {
+      "id": "performance-user-documentation",
+      "title": "Performance and User Documentation",
+      "objective": "Make the command fast, well documented, and easy for users to learn.",
+      "status": "planned",
+      "features": [
+        {
+          "id": "profile-large-dofiles",
+          "title": "Profile current implementation on large do-files and multi-file projects",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "optimize-parsing-selection",
+          "title": "Optimize bottlenecks in parsing and line selection",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "expand-sthlp-documentation",
+          "title": "Expand .sthlp documentation with examples, limitations, and returned results",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "quickstart-example-scripts",
+          "title": "Add user-facing example scripts and a quick-start workflow",
+          "status": "idea",
+          "plan": null
+        }
+      ]
+    }
+  ]
 }

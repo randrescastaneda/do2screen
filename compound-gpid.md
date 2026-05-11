@@ -21,4 +21,4 @@ do2screen is a Stata package that allows users to review specific sections of a 
 
 ## Current Focus
 
-Improving code quality and modularity of the existing do2screen.ado implementation.
+Preserve current behavior while making the codebase testable, auditable, and easier to extend.
