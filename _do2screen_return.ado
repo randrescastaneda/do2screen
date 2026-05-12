@@ -1,13 +1,12 @@
-*! _do2screen_return -- populate r() scalars and _fr_do2screen frame
-*! Part of do2screen v4.0 <12may2026>
-*! Author: R.Andres Castaneda
+*! _do2screen_return v4.0 <12may2026>  R.Andres Castaneda
+*! populate r() scalars and _fr_do2screen frame
 *
 *  Returns
 *  -------
 *  r(nlines)   number of selected lines
 *  r(dofile)   path of the analysed do-file
 *  r(lines)    1 x r(nlines) row matrix of selected line numbers
-*  frame _fr_do2screen  (columns: line, code, variable)
+*  frame _fr_do2screen  (columns: line, code, variable, action)
 
 version 16.1
 
@@ -25,11 +24,11 @@ program define _do2screen_return, rclass
     local sellines ""
 
     if ("`mode'" == "variables") {
-        frame _fr_do2screen_parsed: ///
+        frame _fr_do2screen_parsed: quietly ///
             levelsof line if selection == 1, local(sellines) missing
     }
     else if ("`mode'" == "find") {
-        frame _fr_do2screen_parsed: ///
+        frame _fr_do2screen_parsed: quietly ///
             levelsof line if selection == -1, local(sellines) missing
     }
     else if ("`mode'" == "range") {
@@ -69,7 +68,7 @@ program define _do2screen_return, rclass
         frame _fr_do2screen_parsed {
             if ("`mode'" == "variables") {
                 local rownum = 0
-                levelsof line if selection == 1, local(vlines)
+                quietly levelsof line if selection == 1, local(vlines)
                 foreach vline of local vlines {
                     local ++rownum
                     local vcode: disp code[`vline']
@@ -79,7 +78,7 @@ program define _do2screen_return, rclass
             }
             else if ("`mode'" == "find") {
                 local rownum = 0
-                levelsof line if selection == -1, local(flines)
+                quietly levelsof line if selection == -1, local(flines)
                 foreach fline of local flines {
                     local ++rownum
                     local fcode: disp code[`fline']
