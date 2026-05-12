@@ -1,0 +1,14 @@
+
+    do-file:  c:/Users/wb384996/OneDrive - WBG/ado/myados/do2screen/tests/examples/ex_foreach_loops.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  avg_score
+-------+------------------------------------------------------------------------------------------
+     8:  gen total_score = 0
+    11:  replace score`i' = score`i' / 100
+    12:  replace total_score = total_score + score`i'
+    16:  gen avg_score = total_score / 5
+    17:  replace avg_score = . if total_score == 0
+    29:  label variable avg_score "Average normalized score"
+                                                           ---------- (end of analysis of avg_score)
+

@@ -1,0 +1,9 @@
+
+    do-file:  c:/Users/wb384996/OneDrive - WBG/ado/myados/do2screen/tests/examples/ex_multivar.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  simple
+-------+------------------------------------------------------------------------------------------
+    39:  gen simple = raw_c + raw_d
+                                                           ---------- (end of analysis of simple)
+

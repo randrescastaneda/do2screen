@@ -1,0 +1,31 @@
+
+    do-file:  c:/Users/wb384996/OneDrive - WBG/ado/myados/do2screen/tests/examples/ex_find_targets.do          Open
+------------------------------------------------------------------------------------------------
+
+Line |                 Writing code for:   WELFARE
+-----+------------------------------------------------------------------------------------------
+   3: * Search targets: Poverty (3x), WELFARE (1x), normalize (2x), deflate (1x)   4:    5: * ---- Section A: Poverty measurement ----   6: * Poverty line threshold (1.90 USD PPP per day, annualized)   7: gen pline = 1.90 * 365   8: label variable pline D
+> QDQAnnual poverty lineDQDQ
+                                  ---------- (end of section 1 for WELFARE) ----------
+
+  22: * ---- Section B: WELFARE variable construction ----  23: * WELFARE aggregate is real per-capita consumption  24: gen WELFARE = pccons_def / cpi  25: replace WELFARE = . if missing(pccons_def) | cpi == 0  26: label variable WELFARE DQDQReal per-capi
+> ta welfare aggregateDQDQ  27: 
+                                  ---------- (end of section 2 for WELFARE) ----------
+
+  23: * WELFARE aggregate is real per-capita consumption  24: gen WELFARE = pccons_def / cpi  25: replace WELFARE = . if missing(pccons_def) | cpi == 0  26: label variable WELFARE DQDQReal per-capita welfare aggregateDQDQ  27:   28: * ---- Section C: norm
+> alize inputs ----
+                                  ---------- (end of section 3 for WELFARE) ----------
+
+  24: gen WELFARE = pccons_def / cpi  25: replace WELFARE = . if missing(pccons_def) | cpi == 0  26: label variable WELFARE DQDQReal per-capita welfare aggregateDQDQ  27:   28: * ---- Section C: normalize inputs ----  29: * normalize consumption before ag
+> gregation
+                                  ---------- (end of section 4 for WELFARE) ----------
+
+  25: replace WELFARE = . if missing(pccons_def) | cpi == 0  26: label variable WELFARE DQDQReal per-capita welfare aggregateDQDQ  27:   28: * ---- Section C: normalize inputs ----  29: * normalize consumption before aggregation  30: gen cons_norm = pccon
+> s / mean_cons if mean_cons > 0
+                                  ---------- (end of section 5 for WELFARE) ----------
+
+  26: label variable WELFARE DQDQReal per-capita welfare aggregateDQDQ  27:   28: * ---- Section C: normalize inputs ----  29: * normalize consumption before aggregation  30: gen cons_norm = pccons / mean_cons if mean_cons > 0  31: 
+                                  ---------- (end of section 6 for WELFARE) ----------
+
+                                                           ---------- (end of analysis of WELFARE)
+

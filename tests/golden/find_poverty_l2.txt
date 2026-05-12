@@ -1,0 +1,26 @@
+
+    do-file:  c:/Users/wb384996/OneDrive - WBG/ado/myados/do2screen/tests/examples/ex_find_targets.do          Open
+------------------------------------------------------------------------------------------------
+
+Line |                 Writing code for:   Poverty
+-----+------------------------------------------------------------------------------------------
+   3: * Search targets: Poverty (3x), WELFARE (1x), normalize (2x), deflate (1x)   4:    5: * ---- Section A: Poverty measurement ----
+                                  ---------- (end of section 1 for Poverty) ----------
+
+   5: * ---- Section A: Poverty measurement ----   6: * Poverty line threshold (1.90 USD PPP per day, annualized)   7: gen pline = 1.90 * 365
+                                  ---------- (end of section 2 for Poverty) ----------
+
+   6: * Poverty line threshold (1.90 USD PPP per day, annualized)   7: gen pline = 1.90 * 365   8: label variable pline DQDQAnnual poverty lineDQDQ
+                                  ---------- (end of section 3 for Poverty) ----------
+
+  10: * Poverty indicator for primary line  11: gen poor = (welfare < pline) if !missing(welfare)  12: label variable poor DQDQBinary poverty indicatorDQDQ
+                                  ---------- (end of section 4 for Poverty) ----------
+
+  14: * Poverty gap index  15: gen povgap = max(0, (pline - welfare) / pline) if !missing(welfare)  16: label variable povgap DQDQPoverty gapDQDQ
+                                  ---------- (end of section 5 for Poverty) ----------
+
+  16: label variable povgap DQDQPoverty gapDQDQ  17:   18: * Moderate poverty line (3.20 USD PPP per day)
+                                  ---------- (end of section 6 for Poverty) ----------
+
+                                                           ---------- (end of analysis of Poverty)
+

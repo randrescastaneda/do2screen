@@ -1,0 +1,16 @@
+
+    do-file:  c:/Users/wb384996/OneDrive - WBG/ado/myados/do2screen/tests/examples/ex_gen_replace.do          Open
+------------------------------------------------------------------------------------------------
+
+Line |                 Writing code between lines:   9 & 15
+-----+------------------------------------------------------------------------------------------
+
+   9: gen wages = labourinc * 12
+  10: gen transfers = nonlabourinc + govtransfer
+  11: 
+  12: * ---- Step 3: Compound expression ----
+  13: gen income = wages + transfers
+  14: replace income = 0 if income < 0
+  15: replace income = . if missing(wages) | missing(transfers)
+                                            ---------- (end of analysis of lines between 9 & 15)
+

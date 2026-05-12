@@ -1,0 +1,10 @@
+
+    do-file:  c:/Users/wb384996/OneDrive - WBG/ado/myados/do2screen/tests/examples/ex_gen_replace.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  wages
+-------+------------------------------------------------------------------------------------------
+     9:  gen wages = labourinc * 12
+    30:  drop wages transfers govtransfer
+                                                           ---------- (end of analysis of wages)
+
