@@ -1,6 +1,5 @@
-*! _do2screen_parse -- read & comment-strip a do-file into _fr_do2screen_parsed
-*! Part of do2screen v4.0 <12may2026>
-*! Author: R.Andres Castaneda
+*! _do2screen_parse v4.0 <12may2026>  R.Andres Castaneda
+*! read & comment-strip a do-file into _fr_do2screen_parsed
 
 version 16.1
 

@@ -1,6 +1,5 @@
-*! _do2screen_find -- find() mode output for do2screen
-*! Part of do2screen v4.0 <12may2026>
-*! Author: R.Andres Castaneda
+*! _do2screen_find v4.0 <12may2026>  R.Andres Castaneda
+*! find() mode output for do2screen
 
 version 16.1
 
@@ -13,8 +12,9 @@ program define _do2screen_find
     if ("`scalarname'" == "") local scalarname "s_varcode"
 
     * NOTE: crlf intentionally NOT defined in find mode.
-    *       The original code did not set crlf here, so the scalar
-    *       accumulates code lines without embedded newlines.
+    *       The scalar accumulates code lines without embedded newlines.
+    *       To fix: add crlf, switch display to per-line noi disp (like vartrack),
+    *       and regenerate golden files. Tracked as P0.1 [manual].
 
     frame _fr_do2screen_parsed {
 

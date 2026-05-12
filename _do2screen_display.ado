@@ -1,6 +1,5 @@
-*! _do2screen_display -- display do-file header for do2screen
-*! Part of do2screen v4.0 <12may2026>
-*! Author: R.Andres Castaneda
+*! _do2screen_display v4.0 <12may2026>  R.Andres Castaneda
+*! display do-file header for do2screen
 *
 *  Displays the do-file section header (filename + browse link + hline).
 *  Called once per do-file by the main do2screen dispatcher.

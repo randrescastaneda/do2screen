@@ -1,6 +1,5 @@
-*! _do2screen_aftervar -- post-creation tracking: drop, label, foreach loops
-*! Part of do2screen v4.0 <12may2026>
-*! Author: R.Andres Castaneda
+*! _do2screen_aftervar v4.0 <12may2026>  R.Andres Castaneda
+*! post-creation tracking: drop, label, foreach loops
 
 version 16.1
 
