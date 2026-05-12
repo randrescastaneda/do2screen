@@ -17,6 +17,7 @@
 version 16.1
 set more off
 set linesize 200
+assert c(linesize) == 200
 set varabbrev off
 
 * ============================================================
@@ -213,6 +214,15 @@ shell copy "`tmp'_var_simple.txt" "`goldback'\var_simple.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
+* 1.16 income wages — two-variable reference (used as dedup non-adjacent golden)
+capture noisily ///
+    do2screen using "`expath'/ex_gen_replace.do", ///
+        var(income wages) text("`tmp'_var_income_wages") replace
+local rc1 = _rc
+shell copy "`tmp'_var_income_wages.txt" "`goldback'\var_income_wages.txt"
+if `rc1' == 0 local ++n_ok
+else           local ++n_fail
+
 * ============================================================
 * 2. Find mode tests
 * ============================================================
@@ -405,6 +415,15 @@ shell copy "`tmp'_var_empty_find.txt" "`goldback'\var_empty_find.txt"
 capture confirm file "`golden'/var_empty_find.txt"
 if _rc == 0 local ++n_ok
 else         local ++n_fail
+
+* 4.5 Range end cap — range end beyond file length must not error
+capture noisily ///
+    do2screen using "`expath'/ex_gen_replace.do", ///
+        range(1 9999) text("`tmp'_range_eof_cap") replace
+local rc1 = _rc
+shell copy "`tmp'_range_eof_cap.txt" "`goldback'\range_eof_cap.txt"
+if `rc1' == 0 local ++n_ok
+else           local ++n_fail
 
 * ============================================================
 * 5. Summary and determinism report

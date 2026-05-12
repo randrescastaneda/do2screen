@@ -12,6 +12,7 @@ program define _do2screen_find
     if ("`scalarname'" == "") local scalarname "s_varcode"
 
     * TODO: line separator for scalar output (same pattern as vartrack)
+    *       When fixed: regenerate ALL find-mode golden files (find_*.txt).
 
     frame _fr_do2screen_parsed {
 
@@ -40,6 +41,7 @@ program define _do2screen_find
 
                 foreach fline of local nlines {
 
+                    * NOTE: scalar reset per section; holds last-matched section only (by design).
                     scalar `scalarname' = ""
                     local ++section
 

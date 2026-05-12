@@ -21,6 +21,7 @@
 version 16.1
 set more off
 set linesize 200
+assert c(linesize) == 200
 set varabbrev off
 
 * ============================================================
@@ -185,6 +186,12 @@ do2screen using "`expath'/ex_gen_replace.do", ///
 assert_output_match , outfile("`tmp'_var_income_dedup.txt") ///
     goldenfile("`golden'/var_income.txt") testname("var_income_dedup")
 
+* 1.17 dedup -- non-adjacent: var(income wages income) must equal var(income wages)
+do2screen using "`expath'/ex_gen_replace.do", ///
+    var(income wages income) text("`tmp'_var_income_wages_dedup") replace
+assert_output_match , outfile("`tmp'_var_income_wages_dedup.txt") ///
+    goldenfile("`golden'/var_income_wages.txt") testname("var_income_wages_dedup")
+
 * ============================================================
 * 2. Find mode tests
 * ============================================================
@@ -333,13 +340,19 @@ assert_output_match , outfile("`tmp'_var_empty_find.txt") ///
     goldenfile("`golden'/var_empty_find.txt") testname("var_empty_file_find")
 
 * 4.5 Range end cap -- range end beyond file length must not error
-capture do2screen using "`expath'/ex_gen_replace.do", ///
+* Note: capture noisily needed so do2screen can write its text log file.
+* Plain `capture` suppresses secondary log writes, producing a 0-byte file.
+capture noisily do2screen using "`expath'/ex_gen_replace.do", ///
     range(1 9999) text("`tmp'_range_eof_cap") replace
 if _rc != 0 {
     display as error "FAIL: range_eof_cap raised rc=`_rc'"
     scalar tests_failed = tests_failed + 1
 }
-else scalar tests_ok = tests_ok + 1
+else {
+    scalar tests_ok = tests_ok + 1
+    assert_output_match , outfile("`tmp'_range_eof_cap.txt") ///
+        goldenfile("`golden'/range_eof_cap.txt") testname("range_eof_cap")
+}
 
 * ============================================================
 * 5. Final report

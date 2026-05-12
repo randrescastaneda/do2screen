@@ -71,7 +71,9 @@ program define _do2screen_return, rclass
             if ("`mode'" == "variables") {
                 local rownum = 0
                 quietly levelsof line if selection == 1, local(vlines)
-                * attribute lines to variable name when a single variable was requested
+                * normalise to post-dedup count for single-var detection
+                local variables: list uniq variables
+                * attribute lines to variable when single token in variables() option (normalised above)
                 local _attrvar ""
                 if wordcount(`"`variables'"') == 1 local _attrvar = strtrim(`"`variables'"')
                 foreach vline of local vlines {
