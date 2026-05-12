@@ -1,0 +1,41 @@
+*! _do2screen_range -- range() mode output for do2screen
+*! Part of do2screen v4.0 <12may2026>
+*! Author: R.Andres Castaneda
+
+version 16.1
+
+program define _do2screen_range
+
+    syntax , start(integer) end(integer) ///
+        [SCALARname(string)]
+
+    if ("`scalarname'" == "") local scalarname "s_varcode"
+
+    local crlf "`=char(10)'`=char(13)'"
+
+    frame _fr_do2screen_parsed {
+
+        noi di as text _new ///
+            "Line {c |}                {cmd: Writing code between lines:}  {result: `start' & `end'}"
+        noi di as text "{hline 5}{c +}{hline 90}"
+
+        * escape residual backticks for macro safety during display
+        qui replace code = subinstr(code, "`=char(96)'", ///
+            "`=char(92)'`=char(96)'", .)
+
+        scalar `scalarname' = ""
+
+        foreach rline of numlist `start'/`end' {
+            local space: disp _dup(`=4 - length("`rline'")') " "
+            local lcode: disp code[`rline']
+            scalar `scalarname' = `scalarname' + ///
+                `"`crlf'`space'`rline': `lcode'"'
+        }
+
+        noi disp in y `scalarname'
+        noi di as text _column(45) "{hline 10}" ///
+            " (end of analysis of lines between `start' & `end')" _newline
+
+    }  // end frame
+
+end

@@ -1,13 +1,13 @@
 ---
 date: 2026-05-12
 title: "Tested Modular Baseline Implementation (revised)"
-status: active
+status: completed
 scope: "Standard"
 brainstorm: ".cg-docs/brainstorms/2026-05-12-tested-modular-baseline.md"
 language: "Stata"
 estimated-effort: "large"
 phases: 2
-completed-phases: [1]
+completed-phases: [1, 2]
 current-phase: 2
 tags: [modularization, testing, refactor, do2screen, golden-output]
 revision-of: ".cg-docs/plans/2026-05-12-tested-modular-baseline.md"
