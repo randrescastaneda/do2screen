@@ -109,6 +109,14 @@ program define do2screen, rclass
                 local end: word 2 of `range'
                 local lines = `end' - `start'
             }
+            if (`start' < 1) {
+                noi disp as error "range(): start must be >= 1"
+                error 198
+            }
+            if (`start' > `end') {
+                noi disp as error "range(): start (`start') must be <= end (`end')"
+                error 198
+            }
         }
 
         * text / log option
@@ -121,6 +129,7 @@ program define do2screen, rclass
         * resolve do-file list
         if (`"`using'"' == `""') {
             local dofiles: dir . files "*.do"
+            local dofiles: list sort dofiles  // deterministic order across OSes
         }
         else {
             local dofiles `""`using'""'
@@ -178,15 +187,16 @@ program define do2screen, rclass
 
             * -- structured returns (r(), _fr_do2screen) --
             if ("`variables'" != "") {
-                cap _do2screen_return,              ///
-                    dofile(`dofile') mode(variables)
+                cap noi _do2screen_return,              ///
+                    dofile(`dofile') mode(variables)    ///
+                    variables(`variables')
             }
             else if (`"`find'"' != `""') {
-                cap _do2screen_return,              ///
+                cap noi _do2screen_return,              ///
                     dofile(`dofile') mode(find)
             }
             else if ("`range'" != "") {
-                cap _do2screen_return,              ///
+                cap noi _do2screen_return,              ///
                     dofile(`dofile') mode(range)    ///
                     start(`start') end(`end')
             }
@@ -202,6 +212,8 @@ program define do2screen, rclass
         if ("`folder'" != "") cd "`cdir'"
 
         if ("`timer'" != "") noi timer list
+
+        cap frame drop _fr_do2screen_parsed  // clean up internal working frame
 
     }  // end qui
 
