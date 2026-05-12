@@ -1,0 +1,12 @@
+# Stata source files — LF line endings
+*.do    text eol=lf
+*.ado   text eol=lf
+*.sthlp text eol=lf
+
+# Golden reference files — LF line endings (checksum-sensitive)
+tests/golden/*.txt text eol=lf
+
+# Binary files
+*.dta binary
+*.gph binary
+*.pkg binary

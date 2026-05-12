@@ -15,6 +15,7 @@
 * shell copy to move files to tests/golden/.
 
 version 16.1
+set more off
 
 * ============================================================
 * 0. Paths and setup

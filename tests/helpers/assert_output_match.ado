@@ -9,6 +9,7 @@
 *! Requires scalar `tests_failed` to be initialized in the caller.
 
 program define assert_output_match
+    version 16.1
     syntax , outfile(string) goldenfile(string) [testname(string)]
 
     if "`testname'" == "" local testname "`outfile'"
@@ -37,6 +38,7 @@ program define assert_output_match
 
     if (`new_cs' == `gold_cs' & `new_sz' == `gold_sz') {
         display as text "PASS: `testname'"
+        scalar tests_ok = tests_ok + 1
     }
     else {
         display as error "FAIL: `testname'"
