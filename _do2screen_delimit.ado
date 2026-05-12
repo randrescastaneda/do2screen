@@ -1,10 +1,11 @@
-*! _do2screen_delimit -- #delimit loop: populate line/code from precode
-*! Part of do2screen v4.0 <12may2026>
-*! Author: R.Andres Castaneda
+*! _do2screen_delimit v4.0 <12may2026>  R.Andres Castaneda
+*! #delimit loop: populate line/code from precode
 
 version 16.1
 
 program define _do2screen_delimit
+
+    syntax  // takes no arguments; operates on _fr_do2screen_parsed
 
     * Operates on frame _fr_do2screen_parsed, which must already exist
     * with at least: oriline, precode, line, code  (created by _do2screen_parse)

@@ -1,6 +1,5 @@
-*! _do2screen_range -- range() mode output for do2screen
-*! Part of do2screen v4.0 <12may2026>
-*! Author: R.Andres Castaneda
+*! _do2screen_range v4.0 <12may2026>  R.Andres Castaneda
+*! range() mode output for do2screen
 
 version 16.1
 
@@ -14,6 +13,9 @@ program define _do2screen_range
     local crlf "`=char(10)'`=char(13)'"
 
     frame _fr_do2screen_parsed {
+
+        sum oriline, meanonly
+        local end = min(`end', r(max))  // cap at actual frame size
 
         noi di as text _new ///
             "Line {c |}                {cmd: Writing code between lines:}  {result: `start' & `end'}"
