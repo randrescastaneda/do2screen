@@ -50,14 +50,16 @@ if _rc != 0 {
     exit 601
 }
 
-* Make helper ados (assert_output_match) findable
-adopath ++ "`projpath'/tests/helpers"
+* Make helper ados (assert_output_match) findable — guard to avoid duplicates
+capture which assert_output_match
+if _rc adopath ++ "`projpath'/tests/helpers"
 
 * Force reload of helpers in case old version is cached in memory
 capture program drop assert_output_match
 
-* Make do2screen.ado findable
-adopath ++ "`projpath'"
+* Make do2screen.ado findable — guard to avoid duplicates
+capture which do2screen
+if _rc adopath ++ "`projpath'"
 
 * Force reload of do2screen in case old version is cached
 capture program drop do2screen
@@ -109,6 +111,7 @@ assert_output_match , outfile("`tmp'_var_income_noprevious.txt") ///
     goldenfile("`golden'/var_income_noprevious.txt") testname("var_income_noprevious")
 
 * 1.6 scalarname inconsistency — variables mode ignores scalarname()
+capture scalar drop s_varcode  // clean slate so assertion below is meaningful
 do2screen using "`expath'/ex_gen_replace.do", ///
     var(income) scalarname(my_custom_sc) ///
     text("`tmp'_var_income_scalarname") replace

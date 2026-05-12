@@ -1,4 +1,4 @@
 
-    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen\tests/../tests/examples/NOTEXIST.do          Open
+    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/NOTEXIST.do          Open
 ------------------------------------------------------------------------------------------------
-file c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen\tests/../tests/examples/NOTEXIST.do not found
+file c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/NOTEXIST.do not found

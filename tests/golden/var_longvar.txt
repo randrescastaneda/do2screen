@@ -1,5 +1,5 @@
 
-    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen\tests/../tests/examples/ex_comments_delimit.do          Open
+    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/ex_comments_delimit.do          Open
 ------------------------------------------------------------------------------------------------
 
 Line   |            Writing code for:  longvar
