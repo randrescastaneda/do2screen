@@ -1,3 +1,6 @@
+# Normalize all text files by default; explicit rules below override
+* text=auto
+
 # Stata source files — LF line endings
 *.do    text eol=lf
 *.ado   text eol=lf
