@@ -16,6 +16,7 @@
 
 version 16.1
 set more off
+set varabbrev off
 
 * ============================================================
 * 0. Paths and setup

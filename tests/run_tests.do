@@ -42,6 +42,14 @@ if _rc != 0 {
 local expath   "`projpath'/tests/examples"
 local golden   "`projpath'/tests/golden"
 
+* Pre-flight: ensure golden files exist (run tests/capture_golden.do on fresh clone)
+capture confirm file "`golden'/var_income.txt"
+if _rc != 0 {
+    display as error "ABORT: golden files not found in `golden'"
+    display as error "Run tests/capture_golden.do first to generate reference files."
+    exit 601
+}
+
 * Make helper ados (assert_output_match) findable
 adopath ++ "`projpath'/tests/helpers"
 
@@ -106,8 +114,10 @@ do2screen using "`expath'/ex_gen_replace.do", ///
     text("`tmp'_var_income_scalarname") replace
 * Verify: s_varcode MUST be set (inconsistency preserved)
 capture confirm scalar s_varcode
-if _rc != 0 display as error "FAIL: s_varcode not set -- scalarname inconsistency broken"
-assert _rc == 0
+if _rc != 0 {
+    display as error "FAIL: s_varcode not set -- scalarname inconsistency broken"
+    scalar tests_failed = tests_failed + 1
+}
 assert_output_match , outfile("`tmp'_var_income_scalarname.txt") ///
     goldenfile("`golden'/var_income_scalarname.txt") testname("var_income_scalarname")
 
@@ -219,8 +229,10 @@ do2screen using "`expath'/ex_find_targets.do", ///
     text("`tmp'_find_welfare_scalarname") replace
 * Verify: custom scalar IS set in find mode (unlike variables mode)
 capture confirm scalar my_find_sc
-if _rc != 0 display as error "FAIL: my_find_sc not set -- scalarname not respected in find mode"
-assert _rc == 0
+if _rc != 0 {
+    display as error "FAIL: my_find_sc not set -- scalarname not respected in find mode"
+    scalar tests_failed = tests_failed + 1
+}
 assert_output_match , outfile("`tmp'_find_welfare_scalarname.txt") ///
     goldenfile("`golden'/find_welfare_scalarname.txt") testname("find_welfare_scalarname")
 
@@ -259,8 +271,10 @@ do2screen using "`expath'/ex_gen_replace.do", ///
     range(9 15) scalarname(my_range_sc) ///
     text("`tmp'_range_9_15_scalarname") replace
 capture confirm scalar my_range_sc
-if _rc != 0 display as error "FAIL: my_range_sc not set -- scalarname not respected in range mode"
-assert _rc == 0
+if _rc != 0 {
+    display as error "FAIL: my_range_sc not set -- scalarname not respected in range mode"
+    scalar tests_failed = tests_failed + 1
+}
 assert_output_match , outfile("`tmp'_range_9_15_scalarname.txt") ///
     goldenfile("`golden'/range_9_15_scalarname.txt") testname("range_9_15_scalarname")
 
