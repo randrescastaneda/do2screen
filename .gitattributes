@@ -3,8 +3,10 @@
 *.ado   text eol=lf
 *.sthlp text eol=lf
 
-# Golden reference files — LF line endings (checksum-sensitive)
-tests/golden/*.txt text eol=lf
+# Golden reference files — treated as binary to preserve exact bytes
+# (checksum comparison in run_tests.do requires byte-exact match;
+#  do not normalize line endings or git will break tests on Windows)
+tests/golden/*.txt binary
 
 # Binary files
 *.dta binary

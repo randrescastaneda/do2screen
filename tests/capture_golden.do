@@ -21,12 +21,23 @@ set more off
 * 0. Paths and setup
 * ============================================================
 
-local projpath "c:/Users/wb384996/OneDrive - WBG/ado/myados/do2screen"
+* Derive project root from the Stata working directory.
+* When run as: do "tests/capture_golden.do" from the project root, c(pwd) IS the root.
+* When run via MCP or do-file runner, c(pwd) may be the tests/ subdirectory.
+local projpath "`c(pwd)'"
+capture confirm file "`projpath'/do2screen.ado"
+if _rc != 0 local projpath "`c(pwd)'/.."
+capture confirm file "`projpath'/do2screen.ado"
+if _rc != 0 {
+    display as error "ABORT: do2screen.ado not found in `c(pwd)' or `c(pwd)'/.."
+    display as error "Run from the project root or the tests/ subdirectory."
+    exit 601
+}
 local expath   "`projpath'/tests/examples"
 local golden   "`projpath'/tests/golden"
 
 * Add project to adopath so do2screen.ado is found
-adopath + "`projpath'"
+adopath ++ "`projpath'"
 
 * Temp directory for intermediate files (Stata can write here)
 local tmpdir = subinstr("`c(tmpdir)'", "/", "\", .)

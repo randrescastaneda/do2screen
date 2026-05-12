@@ -1,5 +1,5 @@
 *! run_tests.do
-*! do2screen regression test suite — Phase 1 gate.
+*! do2screen regression test suite -- Phase 1 gate.
 *! Compares do2screen output against golden reference files.
 *!
 *! Usage:
@@ -12,6 +12,11 @@
 *!
 *! Implementation note: Stata (via MCP) cannot write directly to OneDrive paths.
 *! Output is captured to c(tmpdir) and checksummed against golden files.
+*!
+*! Adding new tests (3-step process):
+*!   1. Create a new example do-file in tests/examples/ (or reuse an existing one).
+*!   2. Run tests/capture_golden.do to generate the golden reference file(s).
+*!   3. Add an assert_output_match call in the appropriate section below.
 
 version 16.1
 set more off
@@ -21,18 +26,30 @@ set varabbrev off
 * 0. Setup
 * ============================================================
 
-local projpath "c:/Users/wb384996/OneDrive - WBG/ado/myados/do2screen"
+* Derive project root from the Stata working directory.
+* When run as: do "tests/run_tests.do" from the project root, c(pwd) IS the root.
+* When run via MCP or do-file runner, c(pwd) may be the tests/ subdirectory.
+* Try both; sentinel file do2screen.ado confirms the correct root.
+local projpath "`c(pwd)'"
+capture confirm file "`projpath'/do2screen.ado"
+if _rc != 0 local projpath "`c(pwd)'/.."
+capture confirm file "`projpath'/do2screen.ado"
+if _rc != 0 {
+    display as error "ABORT: do2screen.ado not found in `c(pwd)' or `c(pwd)'/.."
+    display as error "Run from the project root or the tests/ subdirectory."
+    exit 601
+}
 local expath   "`projpath'/tests/examples"
 local golden   "`projpath'/tests/golden"
 
 * Make helper ados (assert_output_match) findable
-adopath + "`projpath'/tests/helpers"
+adopath ++ "`projpath'/tests/helpers"
 
 * Force reload of helpers in case old version is cached in memory
 capture program drop assert_output_match
 
 * Make do2screen.ado findable
-adopath + "`projpath'"
+adopath ++ "`projpath'"
 
 * Force reload of do2screen in case old version is cached
 capture program drop do2screen
