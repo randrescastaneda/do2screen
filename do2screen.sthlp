@@ -1,6 +1,6 @@
 {smcl}
-{* 13dec2016 }{...}
-{cmd:help for do2screen <v 3.0>} 
+{* 12may2026 }{...}
+{cmd:help for do2screen <v 4.0>} 
 {hline}
 {* SYNTAX *}
 {title:Syntax}
@@ -37,7 +37,7 @@ Sections are presented under the following headings:
 
 {synopt:{opt noprevious}}Suppress display of previous variables.{p_end}
 
-{synopt:{opt lables}}Show creation of labels of variables.{p_end}
+{synopt:{opt labels}}Show creation of labels of variables.{p_end}
 
 {syntab:{help do2screen##specify:Specification}}
 {synopt:{opt folder(string)}}Directory path in which do-file/ is/are located. Default current directory{p_end}
@@ -48,11 +48,11 @@ Sections are presented under the following headings:
 {synopt:{opt replace}}Replace existing text file.{p_end}
 
 {syntab:{help do2screen##advanced:Advanced}}
-{synopt:{opt lrep}}Left quote handle (`). default LlLl{p_end}
+{synopt:{opt lrep(string)}}Left quote handle (`). default LlLl{p_end}
 
-{synopt:{opt rrep}}Right quote handle ('). default RrRr{p_end}
+{synopt:{opt rrep(string)}}Right quote handle ('). default RrRr{p_end}
 
-{synopt:{opt dblq}}Double quote handle (""). default DQDQ{p_end}
+{synopt:{opt dblq(string)}}Double quote handle (""). default DQDQ{p_end}
 
 {synopt:{opt scalar:name(string)}}Scalar name with returned output. Default is  s_varcode{p_end}
 
