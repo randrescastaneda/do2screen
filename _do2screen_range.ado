@@ -15,6 +15,10 @@ program define _do2screen_range
     frame _fr_do2screen_parsed {
 
         sum oriline, meanonly
+        if r(N) == 0 {
+            noi disp as text "(no lines to display)"
+            exit
+        }
         local end = min(`end', r(max))  // cap at actual frame size
 
         noi di as text _new ///

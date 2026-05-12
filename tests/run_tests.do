@@ -20,6 +20,7 @@
 
 version 16.1
 set more off
+set linesize 200
 set varabbrev off
 
 * ============================================================
@@ -178,6 +179,12 @@ do2screen using "`expath'/ex_multivar.do", ///
 assert_output_match , outfile("`tmp'_var_simple.txt") ///
     goldenfile("`golden'/var_simple.txt") testname("var_simple")
 
+* 1.16 dedup -- var(income income) must produce same output as var(income)
+do2screen using "`expath'/ex_gen_replace.do", ///
+    var(income income) text("`tmp'_var_income_dedup") replace
+assert_output_match , outfile("`tmp'_var_income_dedup.txt") ///
+    goldenfile("`golden'/var_income.txt") testname("var_income_dedup")
+
 * ============================================================
 * 2. Find mode tests
 * ============================================================
@@ -227,6 +234,7 @@ assert_output_match , outfile("`tmp'_find_not_found.txt") ///
     goldenfile("`golden'/find_not_found.txt") testname("find_not_found")
 
 * 2.8 scalarname respected in find mode (contrast with variables mode)
+capture scalar drop my_find_sc
 do2screen using "`expath'/ex_find_targets.do", ///
     find("WELFARE") scalarname(my_find_sc) ///
     text("`tmp'_find_welfare_scalarname") replace
@@ -270,6 +278,7 @@ assert_output_match , outfile("`tmp'_range_5_15_find.txt") ///
     goldenfile("`golden'/range_5_15_find.txt") testname("range_5_15_find")
 
 * 3.5 scalarname respected in range mode
+capture scalar drop my_range_sc
 do2screen using "`expath'/ex_gen_replace.do", ///
     range(9 15) scalarname(my_range_sc) ///
     text("`tmp'_range_9_15_scalarname") replace
@@ -322,6 +331,15 @@ do2screen using "`expath'/ex_empty.do", ///
     find("anything") text("`tmp'_var_empty_find") replace
 assert_output_match , outfile("`tmp'_var_empty_find.txt") ///
     goldenfile("`golden'/var_empty_find.txt") testname("var_empty_file_find")
+
+* 4.5 Range end cap -- range end beyond file length must not error
+capture do2screen using "`expath'/ex_gen_replace.do", ///
+    range(1 9999) text("`tmp'_range_eof_cap") replace
+if _rc != 0 {
+    display as error "FAIL: range_eof_cap raised rc=`_rc'"
+    scalar tests_failed = tests_failed + 1
+}
+else scalar tests_ok = tests_ok + 1
 
 * ============================================================
 * 5. Final report

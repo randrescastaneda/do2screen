@@ -4,8 +4,9 @@
 
 Line   |            Writing code for:  longvar
 -------+------------------------------------------------------------------------------------------
-     2:   * Used for: do2screen delimiter and comment stripping tests * This file exercises nested comments, #delimit switching, trailcode * accumulation, and continuation lines  use "/base.dta", clear      gen y = x + 1 // inline comment should be ignore
-> d in output gen z = y * 2 + 3       gen realvar = z + 5       gen aftercomment = realvar / 10  * ---- Switch to semicolon delimiter ---- replace aftercomment = 0 if aftercomment < 0 
+     2:   * Used for: do2screen delimiter and comment stripping tests * This file exercises nested comments, #delimit switching, trailcode * accumulation, and continuation lines  use "/base.dta", clea
+> r      gen y = x + 1 // inline comment should be ignored in output gen z = y * 2 + 3       gen realvar = z + 5       gen aftercomment = realvar / 10  * ---- Switch to semicolon delimiter ---- replac
+> e aftercomment = 0 if aftercomment < 0 
      4:   gen longvar = aftercomment + realvar + y 
      6:   replace longvar = . if missing(realvar) 
                                                            ---------- (end of analysis of longvar)

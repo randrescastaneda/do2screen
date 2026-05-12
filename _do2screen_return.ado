@@ -32,6 +32,8 @@ program define _do2screen_return, rclass
             levelsof line if selection == -1, local(sellines) missing
     }
     else if ("`mode'" == "range") {
+        frame _fr_do2screen_parsed: sum oriline, meanonly
+        if !missing(r(max)) local end = min(`end', r(max))  // cap at actual frame size
         numlist "`start'/`end'"
         local sellines `r(numlist)'
     }
@@ -69,11 +71,14 @@ program define _do2screen_return, rclass
             if ("`mode'" == "variables") {
                 local rownum = 0
                 quietly levelsof line if selection == 1, local(vlines)
+                * attribute lines to variable name when a single variable was requested
+                local _attrvar ""
+                if wordcount(`"`variables'"') == 1 local _attrvar = strtrim(`"`variables'"')
                 foreach vline of local vlines {
                     local ++rownum
                     local vcode: disp code[`vline']
                     frame post _fr_do2screen ///
-                        (`vline') (`"`vcode'"') ("")
+                        (`vline') (`"`vcode'"') ("`_attrvar'")
                 }
             }
             else if ("`mode'" == "find") {

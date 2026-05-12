@@ -16,6 +16,7 @@
 
 version 16.1
 set more off
+set linesize 200
 set varabbrev off
 
 * ============================================================

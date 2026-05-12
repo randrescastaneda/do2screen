@@ -1,3 +1,55 @@
+---
+date: 2026-05-12
+plan: .cg-docs/plans/2026-05-12-tested-modular-baseline-v2.md
+depth: thorough
+findings:
+  P0.1: open
+  P0.2: open
+  P1.1: fixed
+  P1.2: open
+  P1.3: open
+  P1.4: open
+  P1.5: open
+  P1.6: fixed
+  P1.7: fixed
+  P1.8: open
+  P1.9: open
+  P1.10: open
+  P1.11: open
+  P1.12: open
+  P1.13: fixed
+  P1.14: open
+  P1.15: open
+  P1.16: fixed
+  P2.1: open
+  P2.2: fixed
+  P2.3: fixed
+  P2.4: open
+  P2.5: open
+  P2.6: open
+  P2.7: open
+  P2.8: fixed
+  P2.9: fixed
+  P2.10: open
+  P2.11: open
+  P2.12: open
+  P2.13: fixed
+  P2.14: open
+  P2.15: fixed
+  P2.16: fixed
+  P3.1: fixed
+  P3.2: fixed
+  P3.3: fixed
+  P3.4: open
+  P3.5: fixed
+  P3.6: fixed
+  P3.7: fixed
+  P3.8: fixed
+  P3.9: open
+  P3.10: open
+  P3.11: open
+  P3.12: open
+---
 # Thorough Review — do2screen refactor/tested-modular-baseline-v2
 **Date:** 2026-05-12  
 **Branch:** refactor/tested-modular-baseline  

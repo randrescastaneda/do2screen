@@ -11,10 +11,7 @@ program define _do2screen_find
 
     if ("`scalarname'" == "") local scalarname "s_varcode"
 
-    * NOTE: crlf intentionally NOT defined in find mode.
-    *       The scalar accumulates code lines without embedded newlines.
-    *       To fix: add crlf, switch display to per-line noi disp (like vartrack),
-    *       and regenerate golden files. Tracked as P0.1 [manual].
+    * TODO: line separator for scalar output (same pattern as vartrack)
 
     frame _fr_do2screen_parsed {
 
@@ -50,7 +47,7 @@ program define _do2screen_find
                         local space: disp _dup(`=4 - length("`=`fline' + `i''")') " "
                         local lcode: disp code[`=`fline' + `i'']
                         scalar `scalarname' = `scalarname' + ///
-                            `"`crlf'`space'`=`fline' + `i'': `lcode'"'
+                            `"`space'`=`fline' + `i'': `lcode'"'
                     }
 
                     noi disp in y `scalarname'

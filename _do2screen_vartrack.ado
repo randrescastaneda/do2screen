@@ -27,7 +27,12 @@ program define _do2screen_vartrack
 
         qui {
 
-        local variables: list uniq variables  // deduplicate input list
+        * deduplicate input list while preserving user-specified order
+        local _vars_dedup ""
+        foreach _v of local variables {
+            if !`: list _v in _vars_dedup' local _vars_dedup "`_vars_dedup' `_v'"
+        }
+        local variables = strtrim("`_vars_dedup'")
 
         foreach var of local variables {
 

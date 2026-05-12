@@ -13,7 +13,8 @@ Line |                 Writing code for:   normalize
   29: * normalize consumption before aggregation  30: gen cons_norm = pccons / mean_cons if mean_cons > 0  31:   32: * Also normalize income
                                   ---------- (end of section 3 for normalize) ----------
 
-  32: * Also normalize income  33: gen inc_norm = labor_inc / mean_inc if mean_inc > 0  34: label variable cons_norm DQDQNormalized consumptionDQDQ  35: label variable inc_norm DQDQNormalized incomeDQDQ
+  32: * Also normalize income  33: gen inc_norm = labor_inc / mean_inc if mean_inc > 0  34: label variable cons_norm DQDQNormalized consumptionDQDQ  35: label variable inc_norm DQDQNormalized incomeDQ
+> DQ
                                   ---------- (end of section 4 for normalize) ----------
 
                                                            ---------- (end of analysis of normalize)
