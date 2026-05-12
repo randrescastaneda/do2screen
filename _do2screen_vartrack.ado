@@ -1,6 +1,5 @@
-*! _do2screen_vartrack -- variable-lineage tracer for do2screen variables() mode
-*! Part of do2screen v4.0 <12may2026>
-*! Author: R.Andres Castaneda
+*! _do2screen_vartrack v4.0 <12may2026>  R.Andres Castaneda
+*! variable-lineage tracer for do2screen variables() mode
 
 version 16.1
 
@@ -28,6 +27,8 @@ program define _do2screen_vartrack
 
         qui {
 
+        local variables: list uniq variables  // deduplicate input list
+
         foreach var of local variables {
 
             replace code      = origcode   // reset anchor for each variable
@@ -41,7 +42,7 @@ program define _do2screen_vartrack
             local i = 1
 
             local mainvar "`var'"
-            local doughter`var' "nope"
+            local daughter`var' "__no_parent__"
             local prevars`var' "`var'"
 
             local stay = 1
@@ -52,6 +53,13 @@ program define _do2screen_vartrack
 
             qui while (`stay' == 1) {
 
+                if (`i' > 999) {
+                    noi disp as error ///
+                        "do2screen: variable lineage exceeds 1000 levels." ///
+                        " Use varout() to exclude a variable."
+                    error 498
+                }
+
                 if ("`previous'" == "noprevious") local stay = 0
                 local j = `D'[1, `i']
 
@@ -60,7 +68,7 @@ program define _do2screen_vartrack
                     local var : word `j' of `prevars`var''
 
                     * ---- circular reference check -------------------------
-                    if ("`var'" == "`doughter`var''") {
+                    if ("`var'" == "`daughter`var''") {
                         disp in red "variable `var' presents circular creation [i.e, x = f(X)]"
                         matrix `D'[1, `i'] = `D'[1, `i'] + 1
                         continue
@@ -120,7 +128,7 @@ program define _do2screen_vartrack
                     * ---- variable not created → skip ----------------------
                     if (`way1' == 0) {
                         matrix `D'[1, `i'] = `D'[1, `i'] + 1
-                        local var "`doughter`var''"
+                        local var "`daughter`var''"
                         continue
                     }
 
@@ -167,11 +175,9 @@ program define _do2screen_vartrack
                     local tofind: list uniq tofind
 
                     if (`"`tofind'"' != `""') {
-                        local eqvars = 0
                         local d ""
                         foreach nvar of local tofind {
                             if ("`nvar'" != "`var'") local d "`d' `nvar'"
-                            else local eqvars = 1
                         }
                         local tofind `"`d'"'
                         local tofind = ltrim(rtrim(itrim(`"`tofind'"')))
@@ -180,18 +186,18 @@ program define _do2screen_vartrack
                         if (`"`tofind'"' != `""') {
                             local prevars`var' "`tofind'"
                             foreach nvar of local tofind {
-                                local doughter`nvar' "`var'"
+                                local daughter`nvar' "`var'"
                             }
                             local ++i
                         }
                         else {
                             matrix `D'[1, `i'] = `D'[1, `i'] + 1
-                            local var "`doughter`var''"
+                            local var "`daughter`var''"
                         }
                     }
                     else {
                         matrix `D'[1, `i'] = `D'[1, `i'] + 1
-                        local var "`doughter`var''"
+                        local var "`daughter`var''"
                     }
 
                 }
@@ -200,7 +206,7 @@ program define _do2screen_vartrack
                     local i = `i' - 1
                     if (`i' == 0) continue, break
                     matrix `D'[1, `i'] = `D'[1, `i'] + 1
-                    local var "`doughter`var''"
+                    local var "`daughter`var''"
                 }
 
             }  // end while stay == 1
