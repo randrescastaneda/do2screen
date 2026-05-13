@@ -1,0 +1,4 @@
+
+    do-file:  NOTEXIST.do          Open
+------------------------------------------------------------------------------------------------
+file c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/NOTEXIST.do not found

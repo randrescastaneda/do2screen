@@ -1,0 +1,32 @@
+
+    do-file:  ex_find_targets.do          Open
+------------------------------------------------------------------------------------------------
+
+Line |                 Writing code for:   normalize
+-----+------------------------------------------------------------------------------------------
+   3: * Search targets: Poverty (3x), WELFARE (1x), normalize (2x), deflate (1x)
+   4: 
+   5: * ---- Section A: Poverty measurement ----
+   6: * Poverty line threshold (1.90 USD PPP per day, annualized)
+                                  ---------- (end of section 1 for normalize) ----------
+
+  28: * ---- Section C: normalize inputs ----
+  29: * normalize consumption before aggregation
+  30: gen cons_norm = pccons / mean_cons if mean_cons > 0
+  31: 
+                                  ---------- (end of section 2 for normalize) ----------
+
+  29: * normalize consumption before aggregation
+  30: gen cons_norm = pccons / mean_cons if mean_cons > 0
+  31: 
+  32: * Also normalize income
+                                  ---------- (end of section 3 for normalize) ----------
+
+  32: * Also normalize income
+  33: gen inc_norm = labor_inc / mean_inc if mean_inc > 0
+  34: label variable cons_norm DQDQNormalized consumptionDQDQ
+  35: label variable inc_norm DQDQNormalized incomeDQDQ
+                                  ---------- (end of section 4 for normalize) ----------
+
+                                                           ---------- (end of analysis of normalize)
+

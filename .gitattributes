@@ -1,0 +1,17 @@
+# Normalize all text files by default; explicit rules below override
+* text=auto
+
+# Stata source files — LF line endings
+*.do    text eol=lf
+*.ado   text eol=lf
+*.sthlp text eol=lf
+
+# Golden reference files — treated as binary to preserve exact bytes
+# (checksum comparison in run_tests.do requires byte-exact match;
+#  do not normalize line endings or git will break tests on Windows)
+tests/golden/*.txt binary
+
+# Binary files
+*.dta binary
+*.gph binary
+*.pkg binary

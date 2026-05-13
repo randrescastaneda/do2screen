@@ -1,0 +1,43 @@
+
+    do-file:  ex_gen_replace.do          Open
+------------------------------------------------------------------------------------------------
+
+Line |                 Writing code between lines:   1 & 34
+-----+------------------------------------------------------------------------------------------
+
+   1: * Example do-file: gen, replace, and egen expressions
+   2: * Used for: do2screen variables() mode testing
+   3: * Target variables: income, wages, transfers, hhincome
+   4: 
+   5: * ---- Step 1: Load base data ----
+   6: use DQDQ/household.dtaDQDQ, clear
+   7: 
+   8: * ---- Step 2: Basic gen ----
+   9: gen wages = labourinc * 12
+  10: gen transfers = nonlabourinc + govtransfer
+  11: 
+  12: * ---- Step 3: Compound expression ----
+  13: gen income = wages + transfers
+  14: replace income = 0 if income < 0
+  15: replace income = . if missing(wages) | missing(transfers)
+  16: 
+  17: * ---- Step 4: Household aggregation ----
+  18: egen hhincome = sum(income), by(hhid)
+  19: 
+  20: * ---- Step 5: Per-capita ----
+  21: gen pchincome = hhincome / hhsize
+  22: replace pchincome = . if hhsize == 0
+  23: 
+  24: * ---- Labels ----
+  25: label variable income DQDQIndividual total incomeDQDQ
+  26: label variable hhincome DQDQHousehold total incomeDQDQ
+  27: label variable pchincome DQDQPer-capita household incomeDQDQ
+  28: 
+  29: * ---- Drop intermediate ----
+  30: drop wages transfers govtransfer
+  31: 
+  32: * ---- Done ----
+  33: save DQDQ/income_vars.dtaDQDQ, replace
+  34: 
+                                            ---------- (end of analysis of lines between 1 & 34)
+

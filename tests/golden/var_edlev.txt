@@ -1,0 +1,10 @@
+
+    do-file:  ex_egen_rename.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  edlev
+-------+------------------------------------------------------------------------------------------
+     9:  rename education educ_code
+    15:  encode educ_code, gen(edlev)
+                                                           ---------- (end of analysis of edlev)
+

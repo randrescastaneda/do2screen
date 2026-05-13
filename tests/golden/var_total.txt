@@ -1,0 +1,20 @@
+
+    do-file:  ex_multivar.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  total
+-------+------------------------------------------------------------------------------------------
+     3:  * Lineage: total = a + b a = c * d b = d * e (d is shared parent)
+     9:  gen c = raw_c * 0.9
+    10:  gen d = raw_d / deflator
+    11:  gen e = raw_e + adjustment
+    14:  gen a = c * d
+    15:  replace a = 0 if a < 0
+    18:  gen b = d * e
+    19:  replace b = . if missing(d) | missing(e)
+    23:  gen total = a + b
+    24:  replace total = 0 if missing(a) & !missing(b)
+    25:  replace total = b if missing(a) & !missing(b)
+    26:  replace total = a if !missing(a) & missing(b)
+                                                           ---------- (end of analysis of total)
+

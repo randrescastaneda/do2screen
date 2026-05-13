@@ -1,0 +1,10 @@
+
+    do-file:  ex_egen_rename.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  wage_num
+-------+------------------------------------------------------------------------------------------
+    19:  destring wage_str, gen(wage_num) force
+    20:  replace wage_num = 0 if missing(wage_num)
+                                                           ---------- (end of analysis of wage_num)
+

@@ -1,6 +1,6 @@
 {smcl}
-{* 13dec2016 }{...}
-{cmd:help for do2screen <v 3.0>} 
+{* 12may2026 }{...}
+{cmd:help for do2screen <v 4.0>}{right:({browse "https://github.com/randrescastaneda/do2screen":GitHub})}
 {hline}
 {* SYNTAX *}
 {title:Syntax}
@@ -37,10 +37,11 @@ Sections are presented under the following headings:
 
 {synopt:{opt noprevious}}Suppress display of previous variables.{p_end}
 
-{synopt:{opt lables}}Show creation of labels of variables.{p_end}
+{synopt:{opt labels}}Show creation of labels of variables.{p_end}
 
 {syntab:{help do2screen##specify:Specification}}
-{synopt:{opt folder(string)}}Directory path in which do-file/ is/are located. Default current directory{p_end}
+{synopt:{opt folder(string)}}Directory path in which do-file/s is/are located. Default current directory.
+{cmd:do2screen} validates that the directory exists and returns an error if not found.{p_end}
 
 {syntab:{help do2screen##export:Export}}
 {synopt:{opt text(string)}}Name and path of text file to save results.{p_end}
@@ -48,11 +49,11 @@ Sections are presented under the following headings:
 {synopt:{opt replace}}Replace existing text file.{p_end}
 
 {syntab:{help do2screen##advanced:Advanced}}
-{synopt:{opt lrep}}Left quote handle (`). default LlLl{p_end}
+{synopt:{opt lrep(string)}}Left quote handle (`). default LlLl{p_end}
 
-{synopt:{opt rrep}}Right quote handle ('). default RrRr{p_end}
+{synopt:{opt rrep(string)}}Right quote handle ('). default RrRr{p_end}
 
-{synopt:{opt dblq}}Double quote handle (""). default DQDQ{p_end}
+{synopt:{opt dblq(string)}}Double quote handle (""). default DQDQ{p_end}
 
 {synopt:{opt scalar:name(string)}}Scalar name with returned output. Default is  s_varcode{p_end}
 
@@ -247,8 +248,32 @@ the other hand
 {p 8 12}{cmd:do2screen using "test.do", var( weight expenditure ) text("text_file") replace}
 
 {title:Saved Results}
-{p 4 6 2} By default, {cmd:do2screen} saves the retrieved code in the scalar 
-{it:s_varcode}. If you have this name in used already, please use option {it:scalarname}.
+
+{pstd}{cmd:do2screen} stores the following in {cmd:r()}:
+
+{synoptset 22 tabbed}{...}
+{p2col 5 22 26 2: Scalars}{p_end}
+{synopt:{cmd:r(nlines)}}number of lines selected{p_end}
+{synopt:{cmd:r(dofile)}}name of the do-file analyzed{p_end}
+
+{p2col 5 22 26 2: Matrices}{p_end}
+{synopt:{cmd:r(lines)}}row vector of selected line numbers{p_end}
+
+{p2col 5 22 26 2: Frames}{p_end}
+{synopt:{cmd:_fr_do2screen}}frame containing selected lines with columns {it:line}, {it:code}, and {it:variable};
+created fresh on each call (requires Stata 16.1+){p_end}
+
+{p2col 5 22 26 2: Scalars (legacy)}{p_end}
+{synopt:{cmd:s_varcode}}retrieved code as a single string scalar (variables mode only;
+always named {it:s_varcode} regardless of {opt scalarname()} — use {opt scalarname()} to
+control the scalar name in find and range modes){p_end}
+{p2colreset}{...}
+
+{title:Requirements}
+
+{pstd}{cmd:do2screen} version 4.0 requires {bf:Stata 16.1 or higher}.
+Versions 3.x and earlier supported Stata 14+; this is a breaking change.
+Frames ({help frames}) are used for internal data handling.
 
 {title:Authors}
 
