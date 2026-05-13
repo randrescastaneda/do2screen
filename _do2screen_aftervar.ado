@@ -49,6 +49,10 @@ program define _do2screen_aftervar, rclass
                 local j = 0
                 while (`inloop' == 0) {
                     local ++j
+                    if (`loopstart' + `j' > _N) {  // closing } not found before EOF
+                        local inloop = 1
+                        continue
+                    }
                     local loopline: disp code[`=`loopstart' + `j'']
                     if (regexm(`"`macval(loopline)'"', `"}"') == 1) ///
                         local inloop = 1
