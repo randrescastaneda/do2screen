@@ -376,16 +376,18 @@ else {
     scalar tests_failed = tests_failed + 1
 }
 
-* 4.8 lineage depth > 999 — overflow guard fires; rc=0 (caught by cap noi internally),
-*     r(nlines) left missing (processing aborted before _do2screen_return)
-capture noisily do2screen using "`expath'/ex_deep_chain.do", var(g_1001)
-if (_rc == 0 & missing(r(nlines))) {
-    display as text "PASS: overflow_guard (r(nlines)=. as expected)"
-    scalar tests_ok = tests_ok + 1
+* 4.8 lineage depth > 999 — overflow guard fires; rc=0 (caught by cap noi internally).
+*     Verified via text() output: warning message must appear in log.
+*     Note: parsing a 1001-line file + tracing 999 lineage levels takes 10-30s. Normal.
+capture noisily do2screen using "`expath'/ex_deep_chain.do", ///
+    var(g_1001) text("`tmp'_var_overflow_guard") replace
+if _rc != 0 {
+    display as error "FAIL: overflow_guard raised rc=`_rc'"
+    scalar tests_failed = tests_failed + 1
 }
 else {
-    display as error "FAIL: overflow_guard — expected rc=0 with r(nlines)=."
-    scalar tests_failed = tests_failed + 1
+    assert_output_match , outfile("`tmp'_var_overflow_guard.txt") ///
+        goldenfile("`golden'/var_overflow_guard.txt") testname("var_overflow_guard")
 }
 
 * ============================================================

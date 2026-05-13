@@ -425,6 +425,18 @@ shell copy "`tmp'_range_eof_cap.txt" "`goldback'\range_eof_cap.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
+* 4.6 — rc-only test (range start < 1): no file capture needed (see run_tests.do 4.6)
+* 4.7 — rc-only test (range start > end): no file capture needed (see run_tests.do 4.7)
+
+* 4.8 Lineage overflow guard — 1001-level chain triggers 999-depth abort
+capture noisily ///
+    do2screen using "`expath'/ex_deep_chain.do", ///
+        var(g_1001) text("`tmp'_var_overflow_guard") replace
+shell copy "`tmp'_var_overflow_guard.txt" "`goldback'\var_overflow_guard.txt"
+capture confirm file "`golden'/var_overflow_guard.txt"
+if _rc == 0 local ++n_ok
+else         local ++n_fail
+
 * ============================================================
 * 5. Summary and determinism report
 * ============================================================

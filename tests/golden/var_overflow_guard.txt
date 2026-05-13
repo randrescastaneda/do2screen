@@ -1,0 +1,4 @@
+
+    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/ex_deep_chain.do          Open
+------------------------------------------------------------------------------------------------
+do2screen: variable lineage exceeds 1000 levels. Use varout() to exclude a variable.
