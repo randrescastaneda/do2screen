@@ -11,9 +11,6 @@ program define _do2screen_find
 
     if ("`scalarname'" == "") local scalarname "s_varcode"
 
-    * TODO: line separator for scalar output (same pattern as vartrack)
-    *       When fixed: regenerate ALL find-mode golden files (find_*.txt).
-
     frame _fr_do2screen_parsed {
 
         * escape residual backticks for macro safety during display
@@ -46,13 +43,14 @@ program define _do2screen_find
                     local ++section
 
                     foreach i of numlist 0/`lines' {
-                        local space: disp _dup(`=4 - length("`=`fline' + `i''")') " "
-                        local lcode: disp code[`=`fline' + `i'']
+                        local displine = `fline' + `i'
+                        local space: disp _dup(`=4 - length("`displine'")') " "
+                        local lcode: disp code[`displine']
                         scalar `scalarname' = `scalarname' + ///
-                            `"`space'`=`fline' + `i'': `lcode'"'
+                            `"`space'`displine': `lcode'"'
+                        noi disp in g `"`space'`displine': "' in y `"`lcode'"'
                     }
 
-                    noi disp in y `scalarname'
                     noi di as text _column(35) "{hline 10}" ///
                         " (end of section `section' for `tofind') " ///
                         "{hline 10}" _newline

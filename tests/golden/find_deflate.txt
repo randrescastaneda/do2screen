@@ -4,26 +4,52 @@
 
 Line |                 Writing code for:   deflate
 -----+------------------------------------------------------------------------------------------
-   3: * Search targets: Poverty (3x), WELFARE (1x), normalize (2x), deflate (1x)   4:    5: * ---- Section A: Poverty measurement ----   6: * Poverty line threshold (1.90 USD PPP per day, annualized) 
->   7: gen pline = 1.90 * 365   8: label variable pline DQDQAnnual poverty lineDQDQ
+   3: * Search targets: Poverty (3x), WELFARE (1x), normalize (2x), deflate (1x)
+   4: 
+   5: * ---- Section A: Poverty measurement ----
+   6: * Poverty line threshold (1.90 USD PPP per day, annualized)
+   7: gen pline = 1.90 * 365
+   8: label variable pline DQDQAnnual poverty lineDQDQ
                                   ---------- (end of section 1 for deflate) ----------
 
-  37: * ---- Section D: deflate variables ----  38: * deflate wages by regional CPI  39: gen wage_real = nominal_wage / regional_cpi  40: replace wage_real = . if regional_cpi == 0 | missing(nominal_w
-> age)  41:   42: * deflate pensions by national CPI
+  37: * ---- Section D: deflate variables ----
+  38: * deflate wages by regional CPI
+  39: gen wage_real = nominal_wage / regional_cpi
+  40: replace wage_real = . if regional_cpi == 0 | missing(nominal_wage)
+  41: 
+  42: * deflate pensions by national CPI
                                   ---------- (end of section 2 for deflate) ----------
 
-  38: * deflate wages by regional CPI  39: gen wage_real = nominal_wage / regional_cpi  40: replace wage_real = . if regional_cpi == 0 | missing(nominal_wage)  41:   42: * deflate pensions by national
->  CPI  43: gen pension_real = nominal_pension / national_cpi
+  38: * deflate wages by regional CPI
+  39: gen wage_real = nominal_wage / regional_cpi
+  40: replace wage_real = . if regional_cpi == 0 | missing(nominal_wage)
+  41: 
+  42: * deflate pensions by national CPI
+  43: gen pension_real = nominal_pension / national_cpi
                                   ---------- (end of section 3 for deflate) ----------
 
-  42: * deflate pensions by national CPI  43: gen pension_real = nominal_pension / national_cpi  44: label variable wage_real DQDQReal wage (deflated)DQDQ  45: label variable pension_real DQDQReal pen
-> sion (deflated)DQDQ  46:   47: save DQDQ/welfare_vars.dtaDQDQ, replace
+  42: * deflate pensions by national CPI
+  43: gen pension_real = nominal_pension / national_cpi
+  44: label variable wage_real DQDQReal wage (deflated)DQDQ
+  45: label variable pension_real DQDQReal pension (deflated)DQDQ
+  46: 
+  47: save DQDQ/welfare_vars.dtaDQDQ, replace
                                   ---------- (end of section 4 for deflate) ----------
 
-  44: label variable wage_real DQDQReal wage (deflated)DQDQ  45: label variable pension_real DQDQReal pension (deflated)DQDQ  46:   47: save DQDQ/welfare_vars.dtaDQDQ, replace  48:   49: 
+  44: label variable wage_real DQDQReal wage (deflated)DQDQ
+  45: label variable pension_real DQDQReal pension (deflated)DQDQ
+  46: 
+  47: save DQDQ/welfare_vars.dtaDQDQ, replace
+  48: 
+  49: 
                                   ---------- (end of section 5 for deflate) ----------
 
-  45: label variable pension_real DQDQReal pension (deflated)DQDQ  46:   47: save DQDQ/welfare_vars.dtaDQDQ, replace  48:   49:   50: 
+  45: label variable pension_real DQDQReal pension (deflated)DQDQ
+  46: 
+  47: save DQDQ/welfare_vars.dtaDQDQ, replace
+  48: 
+  49: 
+  50: 
                                   ---------- (end of section 6 for deflate) ----------
 
                                                            ---------- (end of analysis of deflate)

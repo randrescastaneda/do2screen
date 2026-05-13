@@ -4,22 +4,34 @@
 
 Line |                 Writing code for:   comment
 -----+------------------------------------------------------------------------------------------
-   1: * This do-file contains only comments â no executable code.   2: * Used for: edge-case testing of comment stripping in do2screen   3: 
+   1: * This do-file contains only comments â no executable code.
+   2: * Used for: edge-case testing of comment stripping in do2screen
+   3: 
                                   ---------- (end of section 1 for comment) ----------
 
-   2: * Used for: edge-case testing of comment stripping in do2screen   3:    4: * Line 3: star-comment at column 1
+   2: * Used for: edge-case testing of comment stripping in do2screen
+   3: 
+   4: * Line 3: star-comment at column 1
                                   ---------- (end of section 2 for comment) ----------
 
-   4: * Line 3: star-comment at column 1   5: * Line 4: star-comment with leading spaces   6: 
+   4: * Line 3: star-comment at column 1
+   5: * Line 4: star-comment with leading spaces
+   6: 
                                   ---------- (end of section 3 for comment) ----------
 
-   5: * Line 4: star-comment with leading spaces   6:    7: 
+   5: * Line 4: star-comment with leading spaces
+   6: 
+   7: 
                                   ---------- (end of section 4 for comment) ----------
 
-  10: // Inline-style comment (Stata 11+)  11:   12: 
+  10: // Inline-style comment (Stata 11+)
+  11: 
+  12: 
                                   ---------- (end of section 5 for comment) ----------
 
-  15: * Final comment line â nothing below  16:   17: 
+  15: * Final comment line â nothing below
+  16: 
+  17: 
                                   ---------- (end of section 6 for comment) ----------
 
                                                            ---------- (end of analysis of comment)
