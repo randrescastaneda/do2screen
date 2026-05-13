@@ -1,5 +1,5 @@
 
-    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/ex_gen_replace.do          Open
+    do-file:  ex_gen_replace.do          Open
 ------------------------------------------------------------------------------------------------
 
 Line |                 Writing code between lines:   13 & 18

@@ -5,14 +5,14 @@
 *
 * Usage: do "tests/capture_golden.do"
 *
-* Output: tests/golden/<testname>.txt — one file per test case.
+* Output: tests/golden/<testname>.txt ? one file per test case.
 *
 * All test cases are wrapped in capture noisily with rc display
 * so this file cannot crash even if individual tests fail.
 *
-* Implementation note: Stata (via MCP) cannot write directly to OneDrive
+* implementation note: Stata (via MCP) cannot write directly to OneDrive
 * paths. We capture do2screen output to Stata's tempdir, then use
-* shell copy to move files to tests/golden/.
+* Stata's built-in copy to move files to tests/golden/ (cross-platform).
 
 version 16.1
 set more off
@@ -42,14 +42,25 @@ local golden   "`projpath'/tests/golden"
 * Add project to adopath so do2screen.ado is found
 adopath ++ "`projpath'"
 
-* Temp directory for intermediate files (Stata can write here)
-local tmpdir = subinstr("`c(tmpdir)'", "/", "\", .)
-if substr("`tmpdir'", -1, 1) == "\" ///
-    local tmpdir = substr("`tmpdir'", 1, length("`tmpdir'")-1)
-local tmp "`tmpdir'\do2s"  // short prefix to avoid path-length issues
-
-* Golden destination with backslashes for shell copy
-local goldback = subinstr("`golden'", "/", "\", .)
+* Temp directory for intermediate files (Stata can write here; OS-aware path handling)
+if "`c(os)'" == "Windows" {
+    local tmpdir = subinstr("`c(tmpdir)'", "/", "\", .)
+    if substr("`tmpdir'", -1, 1) == "\" ///
+        local tmpdir = substr("`tmpdir'", 1, length("`tmpdir'")-1)
+    local tmp "`tmpdir'\do2s"  // short prefix
+    local goldpath = subinstr("`golden'", "/", "\", .)
+    local sep "\"
+    local copy_cmd "copy"
+}
+else {
+    local tmpdir "`c(tmpdir)'"
+    if substr("`tmpdir'", -1, 1) == "/" ///
+        local tmpdir = substr("`tmpdir'", 1, length("`tmpdir'")-1)
+    local tmp "`tmpdir'/do2s"  // short prefix
+    local goldpath "`golden'"
+    local sep "/"
+    local copy_cmd "cp"
+}
 
 * Track how many tests succeeded and failed
 local n_ok   = 0
@@ -59,12 +70,12 @@ local n_fail = 0
 * Helper macro: capture one test case
 *   %capture <name> <do2screen options>
 * Calls do2screen with text(tmp_<name>) replace,
-* then shell copy to tests/golden/<name>.txt
+* then copy to tests/golden/<name>.txt (using Stata's built-in copy)
 * ============================================================
 * (Implemented inline below since Stata macros can't take do2screen calls)
 
 * ============================================================
-* Capture helper: write to tmpdir then shell copy to golden/
+* Capture helper: write to tmpdir then copy to golden/
 * Note: Stata (via MCP) cannot write directly to OneDrive paths.
 * We write to c(tmpdir) which is always accessible, then copy.
 * ============================================================
@@ -73,108 +84,108 @@ local n_fail = 0
 * 1. Variables mode tests
 * ============================================================
 
-* 1.1 income — compound lineage (wages + transfers)
+* 1.1 income ? compound lineage (wages + transfers)
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         var(income) text("`tmp'_var_income") replace
 local rc1 = _rc
-shell copy "`tmp'_var_income.txt" "`goldback'\var_income.txt"
+shell `copy_cmd' "`tmp'_var_income.txt" "`goldpath'`sep'var_income.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.2 income — with labels option
+* 1.2 income ? with labels option
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         var(income) labels text("`tmp'_var_income_labels") replace
 local rc1 = _rc
-shell copy "`tmp'_var_income_labels.txt" "`goldback'\var_income_labels.txt"
+shell `copy_cmd' "`tmp'_var_income_labels.txt" "`goldpath'`sep'var_income_labels.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.3 hhincome — traces through income (nested lineage)
+* 1.3 hhincome ? traces through income (nested lineage)
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         var(hhincome) text("`tmp'_var_hhincome") replace
 local rc1 = _rc
-shell copy "`tmp'_var_hhincome.txt" "`goldback'\var_hhincome.txt"
+shell `copy_cmd' "`tmp'_var_hhincome.txt" "`goldpath'`sep'var_hhincome.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.4 wages — simple single-level
+* 1.4 wages ? simple single-level
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         var(wages) text("`tmp'_var_wages") replace
 local rc1 = _rc
-shell copy "`tmp'_var_wages.txt" "`goldback'\var_wages.txt"
+shell `copy_cmd' "`tmp'_var_wages.txt" "`goldpath'`sep'var_wages.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.5 income with noprevious — should show only direct creation
+* 1.5 income with noprevious ? should show only direct creation
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         var(income) noprevious text("`tmp'_var_income_noprevious") replace
 local rc1 = _rc
-shell copy "`tmp'_var_income_noprevious.txt" "`goldback'\var_income_noprevious.txt"
+shell `copy_cmd' "`tmp'_var_income_noprevious.txt" "`goldpath'`sep'var_income_noprevious.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.6 scalarname inconsistency — variables mode ignores scalarname()
+* 1.6 scalarname inconsistency ? variables mode ignores scalarname()
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         var(income) scalarname(my_custom_sc) ///
         text("`tmp'_var_income_scalarname") replace
 local rc1 = _rc
-shell copy "`tmp'_var_income_scalarname.txt" "`goldback'\var_income_scalarname.txt"
+shell `copy_cmd' "`tmp'_var_income_scalarname.txt" "`goldpath'`sep'var_income_scalarname.txt"
 if `rc1' == 0 {
     capture confirm scalar s_varcode
-    if _rc == 0 display as text "s_varcode set — scalarname inconsistency preserved"
+    if _rc == 0 display as text "s_varcode set ? scalarname inconsistency preserved"
     else         display as error "WARNING: s_varcode not set in variables mode"
     local ++n_ok
 }
 else local ++n_fail
 
-* 1.7 encode — edlev created via encode gen()
+* 1.7 encode ? edlev created via encode gen()
 capture noisily ///
     do2screen using "`expath'/ex_egen_rename.do", ///
         var(edlev) text("`tmp'_var_edlev") replace
 local rc1 = _rc
-shell copy "`tmp'_var_edlev.txt" "`goldback'\var_edlev.txt"
+shell `copy_cmd' "`tmp'_var_edlev.txt" "`goldpath'`sep'var_edlev.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.8 wage_num — destring gen()
+* 1.8 wage_num ? destring gen()
 capture noisily ///
     do2screen using "`expath'/ex_egen_rename.do", ///
         var(wage_num) text("`tmp'_var_wage_num") replace
 local rc1 = _rc
-shell copy "`tmp'_var_wage_num.txt" "`goldback'\var_wage_num.txt"
+shell `copy_cmd' "`tmp'_var_wage_num.txt" "`goldpath'`sep'var_wage_num.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.9 sex — single rename
+* 1.9 sex ? single rename
 capture noisily ///
     do2screen using "`expath'/ex_egen_rename.do", ///
         var(sex) text("`tmp'_var_sex") replace
 local rc1 = _rc
-shell copy "`tmp'_var_sex.txt" "`goldback'\var_sex.txt"
+shell `copy_cmd' "`tmp'_var_sex.txt" "`goldpath'`sep'var_sex.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.10 longvar — #delimit ; multi-line statement
+* 1.10 longvar ? #delimit ; multi-line statement
 capture noisily ///
     do2screen using "`expath'/ex_comments_delimit.do", ///
         var(longvar) text("`tmp'_var_longvar") replace
 local rc1 = _rc
-shell copy "`tmp'_var_longvar.txt" "`goldback'\var_longvar.txt"
+shell `copy_cmd' "`tmp'_var_longvar.txt" "`goldpath'`sep'var_longvar.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.11 avg_score — via foreach loop (tracing total_score parent)
+* 1.11 avg_score ? via foreach loop (tracing total_score parent)
 capture noisily ///
     do2screen using "`expath'/ex_foreach_loops.do", ///
         var(avg_score) text("`tmp'_var_avg_score") replace
 local rc1 = _rc
-shell copy "`tmp'_var_avg_score.txt" "`goldback'\var_avg_score.txt"
+shell `copy_cmd' "`tmp'_var_avg_score.txt" "`goldpath'`sep'var_avg_score.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
@@ -183,43 +194,43 @@ capture noisily ///
     do2screen using "`expath'/ex_foreach_loops.do", ///
         var(avg_score) labels text("`tmp'_var_avg_score_labels") replace
 local rc1 = _rc
-shell copy "`tmp'_var_avg_score_labels.txt" "`goldback'\var_avg_score_labels.txt"
+shell `copy_cmd' "`tmp'_var_avg_score_labels.txt" "`goldpath'`sep'var_avg_score_labels.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.13 total — lineage tracing (a+b, a=c*d, b=d*e, shared parent d)
+* 1.13 total ? lineage tracing (a+b, a=c*d, b=d*e, shared parent d)
 capture noisily ///
     do2screen using "`expath'/ex_multivar.do", ///
         var(total) text("`tmp'_var_total") replace
 local rc1 = _rc
-shell copy "`tmp'_var_total.txt" "`goldback'\var_total.txt"
+shell `copy_cmd' "`tmp'_var_total.txt" "`goldpath'`sep'var_total.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.14 circ — circular reference detection
+* 1.14 circ ? circular reference detection
 capture noisily ///
     do2screen using "`expath'/ex_multivar.do", ///
         var(circ) text("`tmp'_var_circ") replace
 local rc1 = _rc
-shell copy "`tmp'_var_circ.txt" "`goldback'\var_circ.txt"
+shell `copy_cmd' "`tmp'_var_circ.txt" "`goldpath'`sep'var_circ.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.15 simple — single-line creation
+* 1.15 simple ? single-line creation
 capture noisily ///
     do2screen using "`expath'/ex_multivar.do", ///
         var(simple) text("`tmp'_var_simple") replace
 local rc1 = _rc
-shell copy "`tmp'_var_simple.txt" "`goldback'\var_simple.txt"
+shell `copy_cmd' "`tmp'_var_simple.txt" "`goldpath'`sep'var_simple.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 1.16 income wages — two-variable reference (used as dedup non-adjacent golden)
+* 1.16 income wages ? two-variable reference (used as dedup non-adjacent golden)
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         var(income wages) text("`tmp'_var_income_wages") replace
 local rc1 = _rc
-shell copy "`tmp'_var_income_wages.txt" "`goldback'\var_income_wages.txt"
+shell `copy_cmd' "`tmp'_var_income_wages.txt" "`goldpath'`sep'var_income_wages.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
@@ -227,76 +238,76 @@ else           local ++n_fail
 * 2. Find mode tests
 * ============================================================
 
-* 2.1 Poverty — multi-match (appears multiple times) with lines(2)
+* 2.1 Poverty ? multi-match (appears multiple times) with lines(2)
 capture noisily ///
     do2screen using "`expath'/ex_find_targets.do", ///
         find("Poverty") lines(2) text("`tmp'_find_poverty_l2") replace
 local rc1 = _rc
-shell copy "`tmp'_find_poverty_l2.txt" "`goldback'\find_poverty_l2.txt"
+shell `copy_cmd' "`tmp'_find_poverty_l2.txt" "`goldpath'`sep'find_poverty_l2.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 2.2 Poverty — multi-match with lines(5)
+* 2.2 Poverty ? multi-match with lines(5)
 capture noisily ///
     do2screen using "`expath'/ex_find_targets.do", ///
         find("Poverty") lines(5) text("`tmp'_find_poverty_l5") replace
 local rc1 = _rc
-shell copy "`tmp'_find_poverty_l5.txt" "`goldback'\find_poverty_l5.txt"
+shell `copy_cmd' "`tmp'_find_poverty_l5.txt" "`goldpath'`sep'find_poverty_l5.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 2.3 WELFARE — single match
+* 2.3 WELFARE ? single match
 capture noisily ///
     do2screen using "`expath'/ex_find_targets.do", ///
         find("WELFARE") lines(5) text("`tmp'_find_welfare") replace
 local rc1 = _rc
-shell copy "`tmp'_find_welfare.txt" "`goldback'\find_welfare.txt"
+shell `copy_cmd' "`tmp'_find_welfare.txt" "`goldpath'`sep'find_welfare.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 2.4 deflate — single match
+* 2.4 deflate ? single match
 capture noisily ///
     do2screen using "`expath'/ex_find_targets.do", ///
         find("deflate") lines(5) text("`tmp'_find_deflate") replace
 local rc1 = _rc
-shell copy "`tmp'_find_deflate.txt" "`goldback'\find_deflate.txt"
+shell `copy_cmd' "`tmp'_find_deflate.txt" "`goldpath'`sep'find_deflate.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 2.5 normalize — two matches
+* 2.5 normalize ? two matches
 capture noisily ///
     do2screen using "`expath'/ex_find_targets.do", ///
         find("normalize") lines(3) text("`tmp'_find_normalize") replace
 local rc1 = _rc
-shell copy "`tmp'_find_normalize.txt" "`goldback'\find_normalize.txt"
+shell `copy_cmd' "`tmp'_find_normalize.txt" "`goldpath'`sep'find_normalize.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 2.6 comment — in comments-only file
+* 2.6 comment ? in comments-only file
 capture noisily ///
     do2screen using "`expath'/ex_comments_only.do", ///
         find("comment") lines(2) text("`tmp'_find_comments_only") replace
 local rc1 = _rc
-shell copy "`tmp'_find_comments_only.txt" "`goldback'\find_comments_only.txt"
+shell `copy_cmd' "`tmp'_find_comments_only.txt" "`goldpath'`sep'find_comments_only.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 2.7 not found — search string absent
+* 2.7 not found ? search string absent
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         find("NOTPRESENT") text("`tmp'_find_not_found") replace
 local rc1 = _rc
-shell copy "`tmp'_find_not_found.txt" "`goldback'\find_not_found.txt"
+shell `copy_cmd' "`tmp'_find_not_found.txt" "`goldpath'`sep'find_not_found.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 2.8 find with scalarname — should respect scalarname option
+* 2.8 find with scalarname ? should respect scalarname option
 capture noisily ///
     do2screen using "`expath'/ex_find_targets.do", ///
         find("WELFARE") scalarname(my_find_sc) ///
         text("`tmp'_find_welfare_scalarname") replace
 local rc1 = _rc
-shell copy "`tmp'_find_welfare_scalarname.txt" "`goldback'\find_welfare_scalarname.txt"
+shell `copy_cmd' "`tmp'_find_welfare_scalarname.txt" "`goldpath'`sep'find_welfare_scalarname.txt"
 if `rc1' == 0 {
     capture confirm scalar my_find_sc
     if _rc == 0 display as text "Scalarname respected in find mode (my_find_sc set)"
@@ -314,7 +325,7 @@ capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         range(9 15) text("`tmp'_range_9_15") replace
 local rc1 = _rc
-shell copy "`tmp'_range_9_15.txt" "`goldback'\range_9_15.txt"
+shell `copy_cmd' "`tmp'_range_9_15.txt" "`goldpath'`sep'range_9_15.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
@@ -323,7 +334,7 @@ capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         range(13) text("`tmp'_range_13") replace
 local rc1 = _rc
-shell copy "`tmp'_range_13.txt" "`goldback'\range_13.txt"
+shell `copy_cmd' "`tmp'_range_13.txt" "`goldpath'`sep'range_13.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
@@ -332,7 +343,7 @@ capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         range(13) lines(2) text("`tmp'_range_13_l2") replace
 local rc1 = _rc
-shell copy "`tmp'_range_13_l2.txt" "`goldback'\range_13_l2.txt"
+shell `copy_cmd' "`tmp'_range_13_l2.txt" "`goldpath'`sep'range_13_l2.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
@@ -341,17 +352,17 @@ capture noisily ///
     do2screen using "`expath'/ex_find_targets.do", ///
         range(5 15) text("`tmp'_range_5_15_find") replace
 local rc1 = _rc
-shell copy "`tmp'_range_5_15_find.txt" "`goldback'\range_5_15_find.txt"
+shell `copy_cmd' "`tmp'_range_5_15_find.txt" "`goldpath'`sep'range_5_15_find.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 3.5 Range with scalarname — should respect scalarname option
+* 3.5 Range with scalarname ? should respect scalarname option
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         range(9 15) scalarname(my_range_sc) ///
         text("`tmp'_range_9_15_scalarname") replace
 local rc1 = _rc
-shell copy "`tmp'_range_9_15_scalarname.txt" "`goldback'\range_9_15_scalarname.txt"
+shell `copy_cmd' "`tmp'_range_9_15_scalarname.txt" "`goldpath'`sep'range_9_15_scalarname.txt"
 if `rc1' == 0 {
     capture confirm scalar my_range_sc
     if _rc == 0 display as text "Scalarname respected in range mode (my_range_sc set)"
@@ -366,13 +377,13 @@ else local ++n_fail
 
 * For error tests, do2screen may fail (rc != 0) but the text file
 * might not be created. We capture noisily, allow the error,
-* and check if the shell copy succeeded.
+* and check if the copy succeeded.
 
 * 4.1 Nonexistent file
 capture noisily ///
     do2screen using "`expath'/NOTEXIST.do", ///
         find("anything") text("`tmp'_error_nonexistent") replace
-shell copy "`tmp'_error_nonexistent.txt" "`goldback'\error_nonexistent.txt"
+shell `copy_cmd' "`tmp'_error_nonexistent.txt" "`goldpath'`sep'error_nonexistent.txt"
 capture confirm file "`golden'/error_nonexistent.txt"
 if _rc == 0 local ++n_ok
 else         local ++n_fail
@@ -407,32 +418,32 @@ else {
     local ++n_fail
 }
 
-* 4.4 Empty file — find mode (graceful error: "no variables defined")
+* 4.4 Empty file ? find mode (graceful error: "no variables defined")
 capture noisily ///
     do2screen using "`expath'/ex_empty.do", ///
         find("anything") text("`tmp'_var_empty_find") replace
-shell copy "`tmp'_var_empty_find.txt" "`goldback'\var_empty_find.txt"
+shell `copy_cmd' "`tmp'_var_empty_find.txt" "`goldpath'`sep'var_empty_find.txt"
 capture confirm file "`golden'/var_empty_find.txt"
 if _rc == 0 local ++n_ok
 else         local ++n_fail
 
-* 4.5 Range end cap — range end beyond file length must not error
+* 4.5 Range end cap ? range end beyond file length must not error
 capture noisily ///
     do2screen using "`expath'/ex_gen_replace.do", ///
         range(1 9999) text("`tmp'_range_eof_cap") replace
 local rc1 = _rc
-shell copy "`tmp'_range_eof_cap.txt" "`goldback'\range_eof_cap.txt"
+shell `copy_cmd' "`tmp'_range_eof_cap.txt" "`goldpath'`sep'range_eof_cap.txt"
 if `rc1' == 0 local ++n_ok
 else           local ++n_fail
 
-* 4.6 — rc-only test (range start < 1): no file capture needed (see run_tests.do 4.6)
-* 4.7 — rc-only test (range start > end): no file capture needed (see run_tests.do 4.7)
+* 4.6 ? rc-only test (range start < 1): no file capture needed (see run_tests.do 4.6)
+* 4.7 ? rc-only test (range start > end): no file capture needed (see run_tests.do 4.7)
 
-* 4.8 Lineage overflow guard — 1001-level chain triggers 999-depth abort
+* 4.8 Lineage overflow guard ? 1001-level chain triggers 999-depth abort
 capture noisily ///
     do2screen using "`expath'/ex_deep_chain.do", ///
         var(g_1001) text("`tmp'_var_overflow_guard") replace
-shell copy "`tmp'_var_overflow_guard.txt" "`goldback'\var_overflow_guard.txt"
+shell `copy_cmd' "`tmp'_var_overflow_guard.txt" "`goldpath'`sep'var_overflow_guard.txt"
 capture confirm file "`golden'/var_overflow_guard.txt"
 if _rc == 0 local ++n_ok
 else         local ++n_fail

@@ -1,5 +1,5 @@
 
-    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/ex_multivar.do          Open
+    do-file:  ex_multivar.do          Open
 ------------------------------------------------------------------------------------------------
 
 Line   |            Writing code for:  circ

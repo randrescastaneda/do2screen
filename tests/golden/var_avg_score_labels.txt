@@ -1,5 +1,5 @@
 
-    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/ex_foreach_loops.do          Open
+    do-file:  ex_foreach_loops.do          Open
 ------------------------------------------------------------------------------------------------
 
 Line   |            Writing code for:  avg_score

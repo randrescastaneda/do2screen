@@ -1,5 +1,5 @@
 
-    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/ex_egen_rename.do          Open
+    do-file:  ex_egen_rename.do          Open
 ------------------------------------------------------------------------------------------------
 
 Line   |            Writing code for:  sex

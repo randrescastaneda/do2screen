@@ -66,11 +66,19 @@ if _rc adopath ++ "`projpath'"
 * Force reload of do2screen in case old version is cached
 capture program drop do2screen
 
-* Temp storage for comparison files (Stata can write here)
-local tmpdir = subinstr("`c(tmpdir)'", "/", "\", .)
-if substr("`tmpdir'", -1, 1) == "\" ///
-    local tmpdir = substr("`tmpdir'", 1, length("`tmpdir'")-1)
-local tmp "`tmpdir'\do2s_test"  // short prefix
+* Temp storage for comparison files (Stata can write here; OS-aware path handling)
+if "`c(os)'" == "Windows" {
+    local tmpdir = subinstr("`c(tmpdir)'", "/", "\", .)
+    if substr("`tmpdir'", -1, 1) == "\" ///
+        local tmpdir = substr("`tmpdir'", 1, length("`tmpdir'")-1)
+    local tmp "`tmpdir'\do2s_test"
+}
+else {
+    local tmpdir "`c(tmpdir)'"
+    if substr("`tmpdir'", -1, 1) == "/" ///
+        local tmpdir = substr("`tmpdir'", 1, length("`tmpdir'")-1)
+    local tmp "`tmpdir'/do2s_test"
+}
 
 * Counters (assert_output_match reads/writes both scalars)
 scalar tests_failed = 0

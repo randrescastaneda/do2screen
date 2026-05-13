@@ -1,5 +1,5 @@
 
-    do-file:  c:\Users\wb384996\OneDrive - WBG\ado\myados\do2screen/tests/examples/ex_find_targets.do          Open
+    do-file:  ex_find_targets.do          Open
 ------------------------------------------------------------------------------------------------
 
 Line |                 Writing code for:   normalize
