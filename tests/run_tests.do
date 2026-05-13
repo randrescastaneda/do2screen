@@ -354,6 +354,40 @@ else {
         goldenfile("`golden'/range_eof_cap.txt") testname("range_eof_cap")
 }
 
+* 4.6 range start < 1 — must error (rc != 0)
+capture do2screen using "`expath'/ex_gen_replace.do", range(0 5)
+if _rc != 0 {
+    display as text "PASS: range_start_lt1 (rc=`_rc')"
+    scalar tests_ok = tests_ok + 1
+}
+else {
+    display as error "FAIL: range_start_lt1 — should have returned error"
+    scalar tests_failed = tests_failed + 1
+}
+
+* 4.7 range start > end — must error (rc != 0)
+capture do2screen using "`expath'/ex_gen_replace.do", range(15 9)
+if _rc != 0 {
+    display as text "PASS: range_start_gt_end (rc=`_rc')"
+    scalar tests_ok = tests_ok + 1
+}
+else {
+    display as error "FAIL: range_start_gt_end — should have returned error"
+    scalar tests_failed = tests_failed + 1
+}
+
+* 4.8 lineage depth > 999 — overflow guard fires; rc=0 (caught by cap noi internally),
+*     r(nlines) left missing (processing aborted before _do2screen_return)
+capture noisily do2screen using "`expath'/ex_deep_chain.do", var(g_1001)
+if (_rc == 0 & missing(r(nlines))) {
+    display as text "PASS: overflow_guard (r(nlines)=. as expected)"
+    scalar tests_ok = tests_ok + 1
+}
+else {
+    display as error "FAIL: overflow_guard — expected rc=0 with r(nlines)=."
+    scalar tests_failed = tests_failed + 1
+}
+
 * ============================================================
 * 5. Final report
 * ============================================================

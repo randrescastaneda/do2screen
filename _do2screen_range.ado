@@ -20,6 +20,10 @@ program define _do2screen_range
             exit
         }
         local end = min(`end', r(max))  // cap at actual frame size
+        if (`start' > r(max)) {
+            noi disp as error "range(): start (`start') exceeds file length (`=r(max)')"
+            exit 198
+        }
 
         noi di as text _new ///
             "Line {c |}                {cmd: Writing code between lines:}  {result: `start' & `end'}"

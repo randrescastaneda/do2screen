@@ -6,7 +6,7 @@
 *  r(nlines)   number of selected lines
 *  r(dofile)   path of the analysed do-file
 *  r(lines)    1 x r(nlines) row matrix of selected line numbers
-*  frame _fr_do2screen  (columns: line, code, variable, action)
+*  frame _fr_do2screen  (columns: line, code, variable)
 
 version 16.1
 
