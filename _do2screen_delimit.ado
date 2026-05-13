@@ -29,6 +29,7 @@ program define _do2screen_delimit
         * ------ empty / blank line ------------------------------------------
         if regexm(`"`macval(line)'"', `"^[ ]*$"') {
             frame _fr_do2screen_parsed {
+                if (`u' > _N) set obs `u'
                 replace line = `u' in `u'
                 replace code = ""           in `u'
             }
@@ -49,6 +50,7 @@ program define _do2screen_delimit
         * ------ default delimiter (cr) --------------------------------------
         if (`delimit' == 0) {
             frame _fr_do2screen_parsed {
+                if (`u' > _N) set obs `u'
                 replace line = `u'                  in `u'
                 replace code = `"`macval(line)'"'   in `u'
             }
@@ -64,6 +66,7 @@ program define _do2screen_delimit
             while (`"``s''"' != "") {
                 if (`"``s''"' != ";" & `"``=`s'+1''"' != "") {
                     frame _fr_do2screen_parsed {
+                        if (`u' > _N) set obs `u'
                         replace line = `u' in `u'
                         if (`s' == 1) {
                             replace code = `"`trailcode' ``s''"' in `u'
@@ -83,12 +86,16 @@ program define _do2screen_delimit
         }
         else {
             * line has no semicolon → accumulate into trailcode
+            local start_i = `i'
             while !regexm(`"`macval(line)'"', ";") & `i' < `maxline' {
                 local trailcode `"`trailcode' `macval(line)'"'
                 local ++i
                 frame _fr_do2screen_parsed: local line = precode[`i']
             }
-            local --i
+            * Only step back if the inner loop advanced (i.e. found a ';').
+            * If we reached maxline without finding ';', do not decrement —
+            * that would cause the outer while to loop forever on the last line.
+            if `i' > `start_i' local --i
         }
 
     }  // end while
