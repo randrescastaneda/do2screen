@@ -1,7 +1,8 @@
 ---
 date: 2026-05-12
 title: "Tested Modular Baseline Implementation"
-status: active
+status: archived
+archived-reason: "Superseded by 2026-05-12-tested-modular-baseline-v2.md after /cg-plan-review surfaced 11 P1/P2/P3 findings"
 scope: "Standard"
 brainstorm: ".cg-docs/brainstorms/2026-05-12-tested-modular-baseline.md"
 language: "Stata"

@@ -3,23 +3,23 @@ date: 2026-05-12
 plan: .cg-docs/plans/2026-05-12-tested-modular-baseline-v2.md
 depth: thorough
 findings:
-  P0.1: open
-  P0.2: open
+  P0.1: fixed
+  P0.2: fixed
   P1.1: fixed
-  P1.2: open
-  P1.3: open
-  P1.4: open
-  P1.5: open
+  P1.2: fixed
+  P1.3: skipped
+  P1.4: fixed
+  P1.5: skipped
   P1.6: fixed
   P1.7: fixed
-  P1.8: open
-  P1.9: open
-  P1.10: open
-  P1.11: open
-  P1.12: open
+  P1.8: fixed
+  P1.9: skipped
+  P1.10: skipped
+  P1.11: skipped
+  P1.12: skipped
   P1.13: fixed
-  P1.14: open
-  P1.15: open
+  P1.14: fixed
+  P1.15: fixed
   P1.16: fixed
   P2.1: open
   P2.2: fixed

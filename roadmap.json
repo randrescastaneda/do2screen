@@ -5,30 +5,31 @@
       "id": "tested-modular-baseline",
       "title": "Tested Modular Baseline",
       "objective": "Preserve current behavior while making the codebase testable, auditable, and easier to extend.",
-      "status": "planned",
+      "status": "completed",
+      "completed-date": "2026-05-13",
       "features": [
         {
           "id": "regression-test-harness",
           "title": "Build regression test harness for existing behavior",
-          "status": "planned",
+          "status": "completed",
           "plan": ".cg-docs/plans/2026-05-12-tested-modular-baseline-v2.md"
         },
         {
           "id": "canonical-example-dofiles",
           "title": "Create canonical example do-files covering current variables(), find(), and range() modes",
-          "status": "planned",
+          "status": "completed",
           "plan": ".cg-docs/plans/2026-05-12-tested-modular-baseline-v2.md"
         },
         {
           "id": "modularize-internal-programs",
           "title": "Split parsing, selection, display, and variable-tracing logic into smaller internal programs",
-          "status": "planned",
+          "status": "completed",
           "plan": ".cg-docs/plans/2026-05-12-tested-modular-baseline-v2.md"
         },
         {
           "id": "document-supported-syntax",
           "title": "Document current supported and unsupported syntax patterns",
-          "status": "planned",
+          "status": "completed",
           "plan": ".cg-docs/plans/2026-05-12-tested-modular-baseline-v2.md"
         }
       ]
