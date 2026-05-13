@@ -33,9 +33,9 @@ findings:
 
 ### P3 — MINOR (nice to have)
 
-- **[P3.1]** [cg-code-quality / cg-testing] `tests/capture_golden.do` — section 4 comment numbering jumps from `4.5` to `4.8`, skipping 4.6 and 4.7
+- **[P3.1]** ✅ **Fixed** — [cg-code-quality / cg-testing] `tests/capture_golden.do` — section 4 comment numbering jumps from `4.5` to `4.8`, skipping 4.6 and 4.7
   **Why**: Tests 4.6 and 4.7 (range validation rc-only tests) correctly produce no file output and need no golden capture, but the numbering gap will confuse contributors adding future section-4 tests who may wonder if 4.6/4.7 are missing.
-  **Fix**: Insert placeholder comments between blocks 4.5 and 4.8:
+  **Fix applied**: Inserted placeholder comments between blocks 4.5 and 4.8:
   ```stata
   * 4.6 — rc-only test (range start < 1): no file capture needed (see run_tests.do 4.6)
   * 4.7 — rc-only test (range start > end): no file capture needed (see run_tests.do 4.7)

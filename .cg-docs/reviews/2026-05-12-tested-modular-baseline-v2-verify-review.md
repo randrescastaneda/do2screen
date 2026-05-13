@@ -4,9 +4,9 @@ depth: light
 parent-review: .cg-docs/reviews/2026-05-12-tested-modular-baseline-v2-review.md
 type: verification
 findings:
-  P2.1: fixed
-  P3.1: fixed
-  P3.2: fixed
+  P2.1: open
+  P3.1: open
+  P3.2: open
 ---
 
 ## Review Report

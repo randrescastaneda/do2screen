@@ -7,7 +7,7 @@ findings:
   P1.1: fixed
   P1.2: fixed
   P1.3: fixed
-  P1.4: fixed
+  P1.4: open
   P2.1: fixed
   P2.2: fixed
   P2.3: fixed
