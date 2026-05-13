@@ -96,7 +96,11 @@ program define do2screen, rclass
             if regexm(`"`folder'"', `"[a-zA-Z0-9]$"') ///
                 local folder "`folder'/"
             local cdir "`c(pwd)'"
-            cd "`folder'"
+            capture cd "`folder'"
+            if _rc {
+                noi disp as error "folder(): directory not found: `folder'"
+                error 601
+            }
         }
 
         * range: resolve start / end
@@ -184,8 +188,10 @@ program define do2screen, rclass
                     scalarname(`scalarname')
             }
             timer off 4
+            local moderc = _rc  // capture mode sub-command rc for error propagation
 
             * -- structured returns (r(), _fr_do2screen) --
+            if `moderc' continue  // skip return if mode sub-command failed; cleanup runs after loop
             if ("`variables'" != "") {
                 cap noi _do2screen_return,              ///
                     dofile(`dofile') mode(variables)    ///
