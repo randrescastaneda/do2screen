@@ -30,12 +30,12 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@8a96df13519ee81fd526f2dfca5962811136661b # v2
+        uses: quarto-dev/quarto-actions/setup@10ecffe43941bc1d1ea080631818c4aa70ee0435 # main 2025-12-12
         with:
-          version: "1.9"
+          version: "release"
 
       - name: Render Quarto site
-        uses: quarto-dev/quarto-actions/render@8a96df13519ee81fd526f2dfca5962811136661b # v2
+        uses: quarto-dev/quarto-actions/render@10ecffe43941bc1d1ea080631818c4aa70ee0435 # main 2025-12-12
         with:
           path: docs/site
 
