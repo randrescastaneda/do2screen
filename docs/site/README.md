@@ -8,7 +8,7 @@ This directory contains the Quarto source for the [do2screen documentation websi
 quarto preview docs/site
 ```
 
-This starts a live-reloading local server. The rendered output goes to `_site/` at the project root (gitignored).
+This starts a live-reloading local server. The rendered output goes to `docs/site/_site/` (gitignored).
 
 ## Full render (no server)
 
