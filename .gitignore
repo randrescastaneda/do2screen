@@ -13,3 +13,5 @@ compound-gpid.local.md
 /_site/
 docs/site/.quarto/
 docs/site/_freeze/
+docs/site/**/*.html
+docs/site/site_libs/
