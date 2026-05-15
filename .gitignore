@@ -9,3 +9,7 @@
 # Compound GPID local config (user-specific, never commit)
 compound-gpid.local.md
 
+# Quarto website rendered output and cache (never commit)
+/_site/
+docs/site/.quarto/
+docs/site/_freeze/
