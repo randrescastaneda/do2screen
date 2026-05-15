@@ -1,6 +1,6 @@
 {smcl}
-{* 12may2026 }{...}
-{cmd:help for do2screen <v 4.0>}{right:({browse "https://github.com/randrescastaneda/do2screen":GitHub})}
+{* 15may2026 }{...}
+{cmd:help for do2screen <v 5.0>}{right:({browse "https://github.com/randrescastaneda/do2screen":GitHub})}
 {hline}
 {* SYNTAX *}
 {title:Syntax}
@@ -271,8 +271,8 @@ control the scalar name in find and range modes){p_end}
 
 {title:Requirements}
 
-{pstd}{cmd:do2screen} version 4.0 requires {bf:Stata 16.1 or higher}.
-Versions 3.x and earlier supported Stata 14+; this is a breaking change.
+{pstd}{cmd:do2screen} version 5.0 requires {bf:Stata 16.1 or higher}.
+Versions 4.x and earlier supported Stata 14+; this is a breaking change.
 Frames ({help frames}) are used for internal data handling.
 
 {title:License}
@@ -285,6 +285,6 @@ Frames ({help frames}) are used for internal data handling.
 {p 6 6 4}Email {browse "acastanedaa@worldbank.org":acastanedaa@worldbank.org}{p_end}
 {p 6 6 4}Email {browse "r.andres.castaneda@gmail.com ":r.andres.castaneda@gmail.com }{p_end}
 
-{p 4 4 4}Santiago Garriga, Universidad de La Plata, Argentina{p_end}
+{p 4 4 4}Santiago Garriga, Universidad Nacional de La Plata, Argentina{p_end}
 {p 6 6 4}Email {browse "garrigasantiago@gmail.com":garrigasantiago@gmail.com}{p_end}
 
