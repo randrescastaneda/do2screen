@@ -10,7 +10,7 @@ format:
 ::: {.column-page}
 
 ::: {.hero-banner .text-center style="padding: 3rem 1rem 2rem;"}
-# do2screen <span style="font-size:0.5em; color:#6c757d;">v4.0</span>
+# do2screen <span style="font-size:0.5em; color:#6c757d;">v5.0</span>
 
 ### Review any section of your Stata do-file — directly in the console
 
@@ -97,7 +97,7 @@ net install do2screen, ///
 
 ::: {.callout-tip}
 ## Requires Stata 16.1 or higher
-`do2screen` v4.0 uses Stata [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling.
+`do2screen` v5.0 uses Stata [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling.
 :::
 
 ---

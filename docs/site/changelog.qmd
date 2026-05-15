@@ -9,6 +9,17 @@ See the [GitHub Releases page](https://github.com/randrescastaneda/do2screen/rel
 
 ---
 
+## Version 5.0 — 15 May 2026
+
+### Changes
+
+- **Documentation website.** A pkgdown-style website is now available at [randrescastaneda.github.io/do2screen](https://randrescastaneda.github.io/do2screen), built with Quarto and deployed automatically via GitHub Actions.
+- **MIT License.** The package is now formally distributed under the MIT License (see `LICENSE`).
+- **Updated author affiliations.** Santiago Garriga's affiliation updated to Universidad de La Plata, Argentina.
+- **CI hardening.** All GitHub Actions steps are pinned to immutable commit SHAs.
+
+---
+
 ## Version 4.0 — 12 May 2026
 
 **Breaking change: requires Stata 16.1+** (previous requirement was 14+).
@@ -28,10 +39,10 @@ If you are on Stata 16.1+, simply reinstall:
 github install randrescastaneda/do2screen
 ```
 
-If you are on Stata 14–15, remain on v3.x (available from SSC: `ssc install do2screen`). The v4.0 package will not load on Stata versions below 16.1.
+If you are on Stata 14–15, remain on v3.x (available from SSC: `ssc install do2screen`). The v4.0 package (and later v5.0) will not load on Stata versions below 16.1.
 
 ---
 
-## Version 3.x and earlier
+## Version 4.x and earlier
 
-Version history for v3.x and earlier is available on the [GitHub Releases page](https://github.com/randrescastaneda/do2screen/releases).
+Version history for v4.x and earlier is available on the [GitHub Releases page](https://github.com/randrescastaneda/do2screen/releases).

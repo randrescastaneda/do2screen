@@ -92,7 +92,7 @@ If no `using` is specified, `do2screen` searches all do-files in the current dir
 
 ## Requirements
 
-- **Stata 16.1 or higher.** v4.0 uses Stata [frames](https://www.stata.com/manuals/dframes.pdf) internally. Stata 14–15 users should use v3.x.
+- **Stata 16.1 or higher.** v5.0 uses Stata [frames](https://www.stata.com/manuals/dframes.pdf) internally. Stata 14–15 users should use v3.x (available from SSC).
 - No external packages required.
 
 ---

@@ -34,12 +34,12 @@ net install do2screen, ///
 ::: {.callout-warning}
 ## SSC version is outdated
 
-`do2screen` is also available on SSC (`ssc install do2screen`), but the SSC copy may lag behind the current release. We recommend installing from GitHub to get v4.0 and all recent fixes.
+`do2screen` is also available on SSC (`ssc install do2screen`), but the SSC copy may lag behind the current release. We recommend installing from GitHub to get v5.0 and all recent fixes.
 :::
 
 ### Requirements
 
-- **Stata 16.1 or higher** — v4.0 uses [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling. Stata 14–15 users should use v3.x.
+- **Stata 16.1 or higher** — v5.0 uses [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling. Stata 14–15 users should use v3.x (available from SSC).
 
 ---
 

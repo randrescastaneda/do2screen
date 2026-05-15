@@ -91,7 +91,7 @@ Switching between `;` and `cr` within the same file is supported. The `#delimit`
 
 ## Stata version requirement
 
-`do2screen` v4.0 requires **Stata 16.1 or higher**. This is a breaking change from v3.x, which supported Stata 14+. The reason is that v4.0 uses [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling, which were introduced in Stata 16.
+`do2screen` v5.0 requires **Stata 16.1 or higher**. This is a breaking change from v4.x, which also required Stata 16.1+ (and from v3.x, which supported Stata 14+). v5.0 uses [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling.
 
 If you cannot upgrade to Stata 16.1, use v3.x (install from SSC: `ssc install do2screen`).
 
@@ -104,4 +104,4 @@ The `scalarname()` option controls the name of the scalar holding returned code:
 - In **`find()` and `range()` modes**: `scalarname()` works as documented — the scalar is named whatever you specify
 - In **`var()` mode**: `scalarname()` is **silently ignored** — the scalar is always named `s_varcode`
 
-This inconsistency is preserved in v4.0 for backward compatibility.
+This inconsistency is preserved in v5.0 for backward compatibility.
