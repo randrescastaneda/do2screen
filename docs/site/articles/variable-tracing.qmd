@@ -1,0 +1,191 @@
+---
+title: "Variable Tracing"
+subtitle: "Reconstruct a variable's complete derivation history in one view."
+---
+
+## The core idea
+
+When you run a large do-file — or a collection of do-files across a project — any single variable may be created and modified in dozens of places. `do2screen` collects only the relevant lines and displays them together, so you can reconstruct the variable's history without manual searching.
+
+**Three things it shows by default:**
+
+1. **The creation line** — where the variable is first defined (`gen`, `rename`, `encode`, `destring`, `egen`)
+2. **All parent variables** — variables whose values feed into the target, traced recursively
+3. **Post-creation modifications** — subsequent `replace` or `drop` statements
+
+---
+
+## Basic usage
+
+```stata
+do2screen using "analysis.do", var(income)
+```
+
+### Example do-file
+
+```stata
+* analysis.do (excerpt)
+
+* ---- Step 2: Base variables ----
+gen wages = labourinc * 12
+gen transfers = nonlabourinc + govtransfer
+
+* ---- Step 3: Compound expression ----
+gen income = wages + transfers
+replace income = 0 if income < 0
+replace income = . if missing(wages) | missing(transfers)
+
+* ---- Step 4: Household aggregation ----
+egen hhincome = sum(income), by(hhid)
+
+* ---- Step 5: Per-capita ----
+gen pchincome = hhincome / hhsize
+replace pchincome = . if hhsize == 0
+```
+
+### Output
+
+```
+    do-file:  analysis.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  income
+-------+------------------------------------------------------------------------------------------
+     8:  gen wages = labourinc * 12
+     9:  gen transfers = nonlabourinc + govtransfer
+    13:  gen income = wages + transfers
+    14:  replace income = 0 if income < 0
+    15:  replace income = . if missing(wages) | missing(transfers)
+                                                           ---------- (end of analysis of income)
+```
+
+`do2screen` found that `income = wages + transfers`, so it automatically traced `wages` and `transfers` back to their own creation lines (lines 8–9) before showing the income lines (13–15).
+
+---
+
+## Lineage tracing (parent variables)
+
+By default, `do2screen` follows the dependency chain recursively. If `a = b + c` and `b = d * 2`, it will show all three creation lines.
+
+### Suppress with `noprevious`
+
+To see only the direct creation of the target variable — without tracing parents:
+
+```stata
+do2screen using "analysis.do", var(income) noprevious
+```
+
+```
+    do-file:  analysis.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  income
+-------+------------------------------------------------------------------------------------------
+    13:  gen income = wages + transfers
+    14:  replace income = 0 if income < 0
+    15:  replace income = . if missing(wages) | missing(transfers)
+                                                           ---------- (end of analysis of income)
+```
+
+---
+
+## Including label lines
+
+By default, label statements are suppressed. Use `labels` to include them:
+
+```stata
+do2screen using "loops.do", var(avg_score) labels
+```
+
+```
+    do-file:  loops.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  avg_score
+-------+------------------------------------------------------------------------------------------
+     8:  gen total_score = 0
+    11:  replace score1 = score1 / 100
+    12:  replace total_score = total_score + score1
+    16:  gen avg_score = total_score / 5
+    17:  replace avg_score = . if total_score == 0
+    29:  label variable avg_score "Average normalized score"
+                                                           ---------- (end of analysis of avg_score)
+```
+
+---
+
+## Variables inside `foreach` loops
+
+`do2screen` detects variables referenced in `foreach` loop headers and marks the relevant loop body lines as selected.
+
+### Example do-file (excerpt)
+
+```stata
+* Normalize scores from 5 subjects
+local n_subjects 5
+gen total_score = 0
+
+foreach i of numlist 1/`n_subjects' {
+    replace score`i' = score`i' / 100
+    replace total_score = total_score + score`i'
+}
+
+gen avg_score = total_score / 5
+replace avg_score = . if total_score == 0
+```
+
+### Output
+
+```
+
+    do-file:  loops.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  avg_score
+-------+------------------------------------------------------------------------------------------
+     8:  gen total_score = 0
+    11:  replace score`i' = score`i' / 100
+    12:  replace total_score = total_score + score`i'
+    16:  gen avg_score = total_score / 5
+    17:  replace avg_score = . if total_score == 0
+                                                           ---------- (end of analysis of avg_score)
+```
+
+---
+
+## Tracing multiple variables
+
+```stata
+do2screen using "analysis.do", var(income hhincome pchincome)
+```
+
+Each variable is analysed in sequence, with its own header and output block.
+
+---
+
+## Saving output to a file
+
+```stata
+do2screen using "analysis.do", var(income) text("traces/income_trace")
+* Creates traces/income_trace.txt
+
+do2screen using "analysis.do", var(income) text("traces/income_trace") replace
+* Overwrites existing file
+```
+
+---
+
+## Supported creation commands
+
+`var()` mode detects variables created by:
+
+| Command | Example |
+|---------|---------|
+| `gen` / `generate` | `gen income = wages + transfers` |
+| `replace` | `replace income = 0 if income < 0` |
+| `rename` (single and grouped) | `rename (inc1 inc2) (wage_a wage_b)` |
+| `encode ... , gen()` | `encode educ_str, gen(edlev)` |
+| `destring ... , gen()` | `destring wage_str, gen(wage_num) force` |
+| `egen` | `egen hhincome = sum(income), by(hhid)` |
+
+See [Caveats & Limitations](caveats.qmd) for patterns that are not detected.

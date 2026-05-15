@@ -102,7 +102,7 @@
       "id": "performance-user-documentation",
       "title": "Performance and User Documentation",
       "objective": "Make the command fast, well documented, and easy for users to learn.",
-      "status": "planned",
+      "status": "in-progress",
       "features": [
         {
           "id": "profile-large-dofiles",
@@ -127,6 +127,12 @@
           "title": "Add user-facing example scripts and a quick-start workflow",
           "status": "idea",
           "plan": null
+        },
+        {
+          "id": "documentation-website",
+          "title": "Quarto documentation website (pkgdown-style)",
+          "status": "completed",
+          "plan": ".cg-docs/plans/2026-05-15-documentation-website.md"
         }
       ]
     }

@@ -1,20 +1,12 @@
-*! Version 4.0 <12may2026>
+*! Version v5.0 <15may2026>
 *! Author: R.Andres Castaneda -- acastanedaa@worldbank.org
-*! Author: Santiago Garriga   -- santiago.garriga@psestudent.eu
+*! Author: Santiago Garriga   -- garrigasantiago@gmail.com
 *
 *  BREAKING CHANGE: requires Stata 16.1+ (was: 14).
 *  Frames are used for internal data handling; lstrfun is no longer required.
 *
 /* *==========================================================================
 Do2screen: Program to display do-files in result's screen
---------------------------------------------------------------------------
-Created:  06Feb2013  (Santiago Garriga & Andres Castaneda)
-Modified: 29Dec2015  (Santiago Garriga & Andres Castaneda)
-Modified: 26Apr2016  (Andres Castaneda)
-Modified: 15aug2017  (Andres Castaneda)
-Modified: 23sep2017  (Andres Castaneda)
-Modified: 12may2026  (Andres Castaneda) -- v4.0 modular rewrite
-Dependencies: THE WORLD BANK
 *==========================================================================*/
 
 version 16.1
@@ -240,4 +232,4 @@ exit
 *! Version 2.1    <26Apr2016>
 *! Version 2.0    <29Dec2015>
 *! Version 1.1    <05Mar2015>
-*! Version 0.0    <06Feb2015>
+*! Version 0.0.9000    <06Feb2015>
