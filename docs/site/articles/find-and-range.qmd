@@ -1,0 +1,189 @@
+---
+title: "Find & Range"
+subtitle: "Search your do-file by string or display any block of lines."
+---
+
+## Find mode
+
+`find()` searches your do-file for a word or phrase and displays each match with configurable surrounding context.
+
+### Basic search
+
+```stata
+do2screen using "analysis.do", find("Poverty")
+```
+
+This shows every line containing "Poverty" (case-sensitive), plus the 5 following lines for each match:
+
+```
+    do-file:  analysis.do          Open
+------------------------------------------------------------------------------------------------
+
+Line |                 Writing code for:   Poverty
+-----+------------------------------------------------------------------------------------------
+   3: * Search targets: Poverty (3x), WELFARE (1x), normalize (2x), deflate (1x)
+   4:
+   5: * ---- Section A: Poverty measurement ----
+   6: * Poverty line threshold (1.90 USD PPP per day, annualized)
+   7: gen pline = 1.90 * 365
+   8: label variable pline "Annual poverty line"
+                                  ---------- (end of section 1 for Poverty) ----------
+
+   5: * ---- Section A: Poverty measurement ----
+   6: * Poverty line threshold (1.90 USD PPP per day, annualized)
+   7: gen pline = 1.90 * 365
+   8: label variable pline "Annual poverty line"
+   9:
+  10: * Poverty indicator for primary line
+                                  ---------- (end of section 2 for Poverty) ----------
+
+  10: * Poverty indicator for primary line
+  11: gen poor = (welfare < pline) if !missing(welfare)
+  12: label variable poor "Binary poverty indicator"
+  13:
+  14: * Poverty gap index
+  15: gen povgap = max(0, (pline - welfare) / pline) if !missing(welfare)
+                                  ---------- (end of section 3 for Poverty) ----------
+```
+
+### Controlling context lines
+
+Use `lines(#)` to change how many lines appear after each match. Default is 5.
+
+::: {.panel-tabset}
+
+#### `lines(2)` — compact
+
+```stata
+do2screen using "analysis.do", find("Poverty") lines(2)
+```
+
+```
+    do-file:  analysis.do          Open
+------------------------------------------------------------------------------------------------
+
+Line |                 Writing code for:   Poverty
+-----+------------------------------------------------------------------------------------------
+   3: * Search targets: Poverty (3x), WELFARE (1x), normalize (2x), deflate (1x)
+   4:
+   5:
+                                  ---------- (end of section 1 for Poverty) ----------
+
+   5: * ---- Section A: Poverty measurement ----
+   6: * Poverty line threshold (1.90 USD PPP per day, annualized)
+   7:
+                                  ---------- (end of section 2 for Poverty) ----------
+```
+
+#### `lines(10)` — extended
+
+```stata
+do2screen using "analysis.do", find("Poverty") lines(10)
+```
+
+Shows 10 lines of context after each match — useful for seeing the full implementation block.
+
+:::
+
+### Searching for multiple terms
+
+To find multiple terms in a single call, wrap them in double compound quotes. Each term is searched independently:
+
+```stata
+* Find "poverty line" (as a phrase) and also the word "welfare"
+do2screen using "analysis.do", find(`" "poverty line" welfare "')
+```
+
+::: {.callout-important}
+## Exact phrases vs. individual words
+
+- `find("poverty line")` — finds lines containing "poverty" **and** lines containing "line" **separately**
+- `find(`" "poverty line" "')` — finds lines containing the exact phrase "poverty line"
+
+To search for phrases containing spaces, you **must** wrap the phrase in double quotes inside the compound quotes: `` `" "poverty line" "' ``
+:::
+
+::: {.callout-note}
+## Double quotes in output
+
+When the text around a match contains double-quoted strings (e.g., `label variable x "My label"`), the output may show `DQDQ` in place of `"`. This is expected — `do2screen` uses a placeholder system to prevent Stata from interpreting the quotes during processing. See [Caveats & Limitations](caveats.qmd#quote-handling) for details.
+:::
+
+---
+
+## Range mode
+
+`range()` displays a specific block of lines without any searching — useful when you already know which section of the do-file you want to inspect.
+
+### Two-number range
+
+Provide the start and end line numbers:
+
+```stata
+do2screen using "analysis.do", range(13 18)
+```
+
+```
+    do-file:  analysis.do          Open
+------------------------------------------------------------------------------------------------
+
+Line |                 Writing code between lines:   13 & 18
+-----+------------------------------------------------------------------------------------------
+
+  13: gen income = wages + transfers
+  14: replace income = 0 if income < 0
+  15: replace income = . if missing(wages) | missing(transfers)
+  16:
+  17: * ---- Step 4: Household aggregation ----
+  18: egen hhincome = sum(income), by(hhid)
+                                            ---------- (end of analysis of lines between 13 & 18)
+```
+
+### One-number range with `lines()`
+
+Provide a start line and use `lines()` to indicate how many lines to show. Default is 5:
+
+::: {.panel-tabset}
+
+#### `range(13) lines(5)` — default
+
+```stata
+do2screen using "analysis.do", range(13) lines(5)
+```
+
+Shows lines 13–18 (start line + 5 following lines).
+
+#### `range(13) lines(10)` — extended
+
+```stata
+do2screen using "analysis.do", range(13) lines(10)
+```
+
+Shows lines 13–23.
+
+:::
+
+---
+
+## Saving output
+
+Both `find()` and `range()` support the same text export options as `var()`:
+
+```stata
+* Save find results
+do2screen using "analysis.do", find("poverty") text("output/poverty_search") replace
+
+* Save range results
+do2screen using "analysis.do", range(13 18) text("output/income_block") replace
+```
+
+---
+
+## Return values
+
+After a `find()` or `range()` call, the selected lines are stored in:
+
+- **`s_varcode`** scalar — all lines concatenated (name overridable with `scalarname()`)
+- **`r(nlines)`** — number of lines selected
+- **`r(lines)`** — matrix of selected line numbers
+- **`_fr_do2screen`** — frame with columns `line`, `code`, `variable`

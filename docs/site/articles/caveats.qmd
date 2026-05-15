@@ -1,0 +1,107 @@
+---
+title: "Caveats & Limitations"
+subtitle: "Known edge cases and behaviors to be aware of when using do2screen."
+---
+
+## Quote handling {#quote-handling}
+
+Stata uses backticks (`` ` ``), single quotes (`'`), and double quotes (`"`) as macro delimiters. When `do2screen` reads your do-file, it must prevent Stata from interpreting these characters during the analysis. It does this by **replacing quotes with placeholder strings** before processing and restoring them before display.
+
+| Character | Default placeholder |
+|-----------|-------------------|
+| `` ` `` (backtick) | `LlLl` |
+| `'` (single quote) | `RrRr` |
+| `"` (double quote) | `DQDQ` |
+
+::: {.callout-important}
+## DQDQ in find() and range() output
+
+In `find()` and `range()` modes, double-quote restoration is **not applied** before display. If your do-file contains double-quoted strings near a match (e.g., `label variable x "My label"`), the output will show `DQDQ` instead of `"`.
+
+**This is expected behavior.** In `var()` mode, all three placeholders are restored correctly.
+:::
+
+### Changing the placeholders
+
+If your code happens to contain the literal strings `LlLl`, `RrRr`, or `DQDQ`, you will get garbled output. Override them with custom strings:
+
+```stata
+do2screen using "analysis.do", var(income) ///
+    lrep(LEFTQ) rrep(RIGHTQ) dblq(DBLQUOTE)
+```
+
+Choose strings that are guaranteed not to appear in your code.
+
+---
+
+## Comment handling
+
+By default, `do2screen` strips `/* ... */` block comments before processing:
+
+1. **Inline block comments** on a single line — `/* text */` — are replaced with a space (iteratively until none remain)
+2. **Multi-line block comments** — lines between an opening `/*` and its matching `*/` have their content cleared
+
+::: {.callout-note}
+## `//` and `*` comments are NOT stripped
+
+`do2screen` only strips `/* ... */` blocks. Comments starting with `//` or `*` remain in the do-file text and may appear in output. Lines that begin with `*` (star-comments) can occasionally trigger false variable matches if they contain expressions like `* total = a + b`.
+:::
+
+### The `comments` option
+
+```stata
+do2screen using "analysis.do", var(income) comments
+```
+
+With `comments`, all block-comment stripping is disabled. This is **faster** but may produce output containing comment lines you didn't want to see.
+
+---
+
+## Delimiter handling
+
+### `#delimit ;`
+
+`do2screen` handles `#delimit ;` / `#delimit cr` switching within a do-file:
+
+- In `cr` mode (default): each newline is one logical statement
+- In `;` mode: statements are delimited by `;`; multi-line statements are accumulated internally
+
+Switching between `;` and `cr` within the same file is supported. The `#delimit` lines themselves are consumed and not shown in output.
+
+### `///` continuation lines
+
+`///` continuation lines are **not** handled by the delimiter logic. Each physical line appears in output with its own line number. The three slashes are treated as regular characters.
+
+---
+
+## Known limitations
+
+| Limitation | Notes |
+|------------|-------|
+| **`mata:` blocks** | Variable creation inside Mata is not detected by `var()` mode |
+| **`program define` inside the do-file** | Not recognised as a context boundary — may produce false pattern matches |
+| **`include` directives** | `do2screen` reads the file literally; `include`-d files are not followed |
+| **Macro-generated variable names** | If a variable name is built dynamically (e.g., `` `prefix'`i' ``), `do2screen` cannot resolve the macro at analysis time |
+| **`gen` inside frames** | `do2screen` reads do-files as plain text; Stata frame context is not tracked |
+| **`destring` / `tostring` without `gen()`** | In-place transformations (no new name on LHS) are not detected |
+| **Nested `/* */` comments** | Single-level nesting is handled. Deep nesting may not be stripped correctly |
+| **Comment lines matching variable patterns** | A line like `* total = a + b` may be reported as a creation line for `total` |
+
+---
+
+## Stata version requirement
+
+`do2screen` v4.0 requires **Stata 16.1 or higher**. This is a breaking change from v3.x, which supported Stata 14+. The reason is that v4.0 uses [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling, which were introduced in Stata 16.
+
+If you cannot upgrade to Stata 16.1, use v3.x (install from SSC: `ssc install do2screen`).
+
+---
+
+## `scalarname()` option inconsistency
+
+The `scalarname()` option controls the name of the scalar holding returned code:
+
+- In **`find()` and `range()` modes**: `scalarname()` works as documented — the scalar is named whatever you specify
+- In **`var()` mode**: `scalarname()` is **silently ignored** — the scalar is always named `s_varcode`
+
+This inconsistency is preserved in v4.0 for backward compatibility.

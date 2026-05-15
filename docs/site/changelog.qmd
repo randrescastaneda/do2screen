@@ -1,0 +1,37 @@
+---
+title: "Changelog"
+subtitle: "Version history for do2screen."
+---
+
+::: {.callout-note}
+See the [GitHub Releases page](https://github.com/randrescastaneda/do2screen/releases) for the full release history, including tagged source archives.
+:::
+
+---
+
+## Version 4.0 — 12 May 2026
+
+**Breaking change: requires Stata 16.1+** (previous requirement was 14+).
+
+### Changes
+
+- **Frames-based internals.** All internal data handling now uses Stata [frames](https://www.stata.com/manuals/dframes.pdf), replacing the earlier scalar-accumulation approach. This resolves `r(132)` errors that could occur when analysing large do-files with complex compound-quoted code.
+- **New return value: `_fr_do2screen`.** A frame is now created on each call containing columns `line`, `code`, and `variable`, making it easy to process results programmatically.
+- **Modular codebase.** Parsing, selection, display, and variable-tracing logic have been split into separate internal programs (`_do2screen_parse`, `_do2screen_find`, `_do2screen_display`, etc.) for easier maintenance and testing.
+- **Test suite added.** A golden-file regression test harness now covers all three modes (variables, find, range) across a wide range of Stata syntax patterns.
+
+### Migration from v3.x
+
+If you are on Stata 16.1+, simply reinstall:
+
+```stata
+github install randrescastaneda/do2screen
+```
+
+If you are on Stata 14–15, remain on v3.x (available from SSC: `ssc install do2screen`). The v4.0 package will not load on Stata versions below 16.1.
+
+---
+
+## Version 3.x and earlier
+
+Version history for v3.x and earlier is available on the [GitHub Releases page](https://github.com/randrescastaneda/do2screen/releases).

@@ -1,0 +1,111 @@
+---
+title: "do2screen"
+subtitle: "Review any section of your Stata do-file, right in the console."
+format:
+  html:
+    toc: false
+    page-layout: custom
+---
+
+::: {.column-page}
+
+::: {.hero-banner .text-center style="padding: 3rem 1rem 2rem;"}
+# do2screen <span style="font-size:0.5em; color:#6c757d;">v4.0</span>
+
+### Review any section of your Stata do-file — directly in the console
+
+Ever lost track of how a variable was built across a thousand-line script?  
+**do2screen** puts all the relevant code in one place, instantly.
+
+::: {style="margin-top: 1.5rem;"}
+```stata
+github install randrescastaneda/do2screen
+```
+:::
+
+::: {style="margin-top: 1rem;"}
+[Get Started](get-started.qmd){.btn .btn-primary .btn-lg}
+[Reference](reference.qmd){.btn .btn-outline-secondary .btn-lg}
+:::
+:::
+
+---
+
+## What do2screen does
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4}
+### 🔍 Variable Tracing
+
+Trace exactly how a variable was created and modified — including all parent variables. No more scrolling through thousands of lines.
+
+```stata
+do2screen using "analysis.do", ///
+    var(pchincome)
+```
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### 🔎 String Search
+
+Find every occurrence of a word or phrase in your do-file, with configurable lines of context around each match.
+
+```stata
+do2screen using "analysis.do", ///
+    find("poverty line") lines(10)
+```
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### 📄 Line Range
+
+Display any block of lines from your do-file — by start/end line numbers or by start + count.
+
+```stata
+do2screen using "analysis.do", ///
+    range(253 263)
+```
+:::
+
+:::
+
+---
+
+## Quick install
+
+::: {.panel-tabset}
+
+### Recommended (via `github`)
+
+First install the [`github`](https://github.com/haghish/github) package by E. F. Haghish, then install `do2screen`:
+
+```stata
+net install github, from("https://haghish.github.io/github/")
+github install randrescastaneda/do2screen
+```
+
+### Direct (net install)
+
+```stata
+net install do2screen, ///
+    from("https://raw.githubusercontent.com/randrescastaneda/do2screen/master/") ///
+    replace
+```
+
+:::
+
+::: {.callout-tip}
+## Requires Stata 16.1 or higher
+`do2screen` v4.0 uses Stata [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling.
+:::
+
+---
+
+## Authors
+
+Developed by [R. Andres Castaneda](mailto:acastanedaa@worldbank.org) (The World Bank) and [Santiago Garriga](mailto:garrigasantiago@gmail.com) (Universidad Nacional de La Plata).
+
+Licensed under the [MIT License](https://github.com/randrescastaneda/do2screen/blob/master/LICENSE).
+
+:::

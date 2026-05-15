@@ -1,0 +1,157 @@
+---
+title: "Reference"
+subtitle: "Complete documentation for all do2screen options and return values."
+---
+
+## Syntax
+
+```stata
+do2screen [using "filename.do"] , [options]
+```
+
+If no `using` is specified, `do2screen` searches all do-files in the current directory (or the directory set by `folder()`).
+
+---
+
+## Options
+
+### Display options
+
+| Option | Modes | Description |
+|--------|-------|-------------|
+| `var(varlist)` | — | Variables to trace. May **not** be combined with `find` or `range`. More than one variable allowed. |
+| `find(string)` | — | Search for a word or phrase. Displays each match plus surrounding lines (see `lines()`). Use double compound quotes `` `" "phrase one" word "' `` to search for multiple terms or for exact phrases containing spaces. May **not** be combined with `var` or `range`. |
+| `range(# [#])` | — | Show a range of lines. Supply one number (start line, uses `lines()` for end) or two numbers (start and end). May **not** be combined with `var` or `find`. |
+| `lines(#)` | find, range | Number of lines to show after the first match / after the start line. Default: **5**. |
+| `noprevious` | var | Suppress tracing of parent variables. By default, if `income = wages + transfers`, do2screen also shows how `wages` and `transfers` were built. `noprevious` shows only the direct creation of `income`. |
+| `labels` | var | Include `label variable`, `label define`, and `label values` lines in the output. Suppressed by default. |
+
+### Specification options
+
+| Option | Modes | Description |
+|--------|-------|-------------|
+| `folder(path)` | all | Directory to search for do-files. If combined with `using`, equivalent to providing the full path in `using`. If `using` is omitted, all `.do` files in `folder()` are searched. |
+
+### Export options
+
+| Option | Modes | Description |
+|--------|-------|-------------|
+| `text(filename)` | all | Save output to a text file (`.txt`). If no path is given, file is saved in the current directory. |
+| `replace` | all | Overwrite an existing text file set by `text()`. |
+
+### Advanced options
+
+| Option | Modes | Description |
+|--------|-------|-------------|
+| `lrep(string)` | all | Replacement string for the backtick character (`` ` ``). Default: `LlLl`. Change only if your code contains the literal string `LlLl`. |
+| `rrep(string)` | all | Replacement string for the single-quote character (`'`). Default: `RrRr`. |
+| `dblq(string)` | all | Replacement string for the double-quote character (`"`). Default: `DQDQ`. |
+| `scalarname(name)` | find, range | Name of the scalar holding the returned code. Default: `s_varcode`. Has no effect in `var()` mode (scalar is always named `s_varcode` there). |
+| `comments` | all | Disable block-comment stripping. By default, `/* ... */` blocks are stripped before processing to improve accuracy. This option disables stripping (faster but may produce false matches). |
+| `nolinenumbers` | all | Suppress line numbers from output. Primarily useful when capturing output programmatically. |
+| `timer` | all | Display Stata timer output after the analysis. |
+
+---
+
+## Return values
+
+`do2screen` stores results in `r()`:
+
+### Scalars
+
+| Name | Description |
+|------|-------------|
+| `r(nlines)` | Number of lines selected |
+| `r(dofile)` | Name of the do-file analysed |
+
+### Matrices
+
+| Name | Description |
+|------|-------------|
+| `r(lines)` | Row vector of selected line numbers |
+
+### Frames
+
+| Name | Description |
+|------|-------------|
+| `_fr_do2screen` | Frame containing selected lines with columns `line`, `code`, and `variable`. Created fresh on each call. Requires Stata 16.1+. |
+
+### Scalars (legacy)
+
+| Name | Description |
+|------|-------------|
+| `s_varcode` | Retrieved code as a single string scalar. In `var()` mode, always named `s_varcode` regardless of `scalarname()`. In `find()` and `range()` modes, name is set by `scalarname()`. |
+
+::: {.callout-note}
+## `scalarname()` inconsistency
+
+`scalarname()` is honoured in `find()` and `range()` modes but **ignored** in `var()` mode — the scalar is always `s_varcode` there. This is preserved for backward compatibility.
+:::
+
+---
+
+## Requirements
+
+- **Stata 16.1 or higher.** v4.0 uses Stata [frames](https://www.stata.com/manuals/dframes.pdf) internally. Stata 14–15 users should use v3.x.
+- No external packages required.
+
+---
+
+## Examples
+
+```stata
+* --- Variable tracing ---
+
+* Trace one variable in a specific do-file
+do2screen using "analysis.do", var(income)
+
+* Trace multiple variables
+do2screen using "analysis.do", var(income hhincome pchincome)
+
+* Trace without following parent variables
+do2screen using "analysis.do", var(income) noprevious
+
+* Trace including label lines
+do2screen using "analysis.do", var(income) labels
+
+* Trace all do-files in a folder
+do2screen, var(income) folder("C:\myproject\code")
+
+
+* --- Find mode ---
+
+* Find a single word (shows 5 lines of context after each match)
+do2screen using "analysis.do", find("poverty")
+
+* Find a word with custom context window
+do2screen using "analysis.do", find("poverty") lines(10)
+
+* Find multiple terms / an exact phrase
+do2screen using "analysis.do", find(`" "poverty line" welfare "')
+
+
+* --- Range mode ---
+
+* Show lines 50–75
+do2screen using "analysis.do", range(50 75)
+
+* Show line 50 and the next 10 lines
+do2screen using "analysis.do", range(50) lines(10)
+
+
+* --- Export ---
+
+* Save output to a text file
+do2screen using "analysis.do", var(income) text("output/income_trace")
+
+* Replace an existing file
+do2screen using "analysis.do", var(income) text("output/income_trace") replace
+```
+
+---
+
+## Authors
+
+**R. Andres Castaneda** — The World Bank ([acastanedaa@worldbank.org](mailto:acastanedaa@worldbank.org))
+
+**Santiago Garriga** — Universidad Nacional de La Plata ([garrigasantiago@gmail.com](mailto:garrigasantiago@gmail.com))

@@ -1,0 +1,57 @@
+project:
+  type: website
+  output-dir: ../../_site
+
+website:
+  title: "do2screen"
+  description: "Stata package for reviewing do-file sections directly in the Stata console"
+  repo-url: https://github.com/randrescastaneda/do2screen
+  repo-actions: [issue]
+
+  navbar:
+    left:
+      - text: "Get Started"
+        href: get-started.qmd
+      - text: "Reference"
+        href: reference.qmd
+      - text: "Articles"
+        menu:
+          - text: "Variable Tracing"
+            href: articles/variable-tracing.qmd
+          - text: "Find & Range"
+            href: articles/find-and-range.qmd
+          - text: "Caveats & Limitations"
+            href: articles/caveats.qmd
+      - text: "Changelog"
+        href: changelog.qmd
+    right:
+      - icon: github
+        href: https://github.com/randrescastaneda/do2screen
+        aria-label: GitHub
+
+  sidebar:
+    - title: "Articles"
+      style: "docked"
+      contents:
+        - articles/variable-tracing.qmd
+        - articles/find-and-range.qmd
+        - articles/caveats.qmd
+
+  page-footer:
+    left: |
+      **do2screen** is released under the [MIT License](https://github.com/randrescastaneda/do2screen/blob/master/LICENSE).
+    center: |
+      Developed by [R. Andres Castaneda](mailto:acastanedaa@worldbank.org) and [Santiago Garriga](mailto:garrigasantiago@gmail.com)
+    right: |
+      Built with [Quarto](https://quarto.org)
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+    highlight-style: github
+
+search: true

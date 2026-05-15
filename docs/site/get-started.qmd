@@ -1,0 +1,104 @@
+---
+title: "Get Started"
+subtitle: "Install do2screen and run your first analysis in minutes."
+---
+
+## Installation
+
+### Recommended: via the `github` package
+
+The easiest way to install `do2screen` is via [E. F. Haghish's `github`](https://github.com/haghish/github) command, which handles versioning and updates automatically.
+
+**Step 1 — install the `github` package** *(skip if you already have it)*:
+
+```stata
+net install github, from("https://haghish.github.io/github/")
+```
+
+**Step 2 — install `do2screen`**:
+
+```stata
+github install randrescastaneda/do2screen
+```
+
+### Alternative: direct `net install`
+
+If you prefer not to use the `github` command:
+
+```stata
+net install do2screen, ///
+    from("https://raw.githubusercontent.com/randrescastaneda/do2screen/master/") ///
+    replace
+```
+
+::: {.callout-warning}
+## SSC version is outdated
+
+`do2screen` is also available on SSC (`ssc install do2screen`), but the SSC copy may lag behind the current release. We recommend installing from GitHub to get v4.0 and all recent fixes.
+:::
+
+### Requirements
+
+- **Stata 16.1 or higher** — v4.0 uses [frames](https://www.stata.com/manuals/dframes.pdf) for internal data handling. Stata 14–15 users should use v3.x.
+
+---
+
+## Your first analysis
+
+### Trace a variable
+
+Suppose you have a do-file `analysis.do` and you want to know how `pchincome` (per-capita household income) was built. Run:
+
+```stata
+do2screen using "analysis.do", var(pchincome)
+```
+
+`do2screen` scans the file, finds where `pchincome` was created, and traces back through every parent variable — showing you the minimal set of lines needed to reconstruct it from scratch.
+
+**Example output:**
+
+```
+    do-file:  analysis.do          Open
+------------------------------------------------------------------------------------------------
+
+Line   |            Writing code for:  pchincome
+-------+------------------------------------------------------------------------------------------
+     8:  gen wages = labourinc * 12
+     9:  gen transfers = nonlabourinc + govtransfer
+    13:  gen income = wages + transfers
+    14:  replace income = 0 if income < 0
+    15:  replace income = . if missing(wages) | missing(transfers)
+    18:  egen hhincome = sum(income), by(hhid)
+    22:  gen pchincome = hhincome / hhsize
+    23:  replace pchincome = . if hhsize == 0
+                                                           ---------- (end of analysis of pchincome)
+```
+
+Only the lines that matter — no noise. See the [Variable Tracing](articles/variable-tracing.qmd) article for the full feature set.
+
+### Search for a string
+
+Find every line containing "poverty" and show 3 lines of context after each match:
+
+```stata
+do2screen using "analysis.do", find("poverty") lines(3)
+```
+
+See [Find & Range](articles/find-and-range.qmd) for more examples.
+
+### Display a line range
+
+Show lines 50 through 75 of a do-file:
+
+```stata
+do2screen using "analysis.do", range(50 75)
+```
+
+---
+
+## Next steps
+
+- [Variable Tracing](articles/variable-tracing.qmd) — lineage, parent variables, labels, loops
+- [Find & Range](articles/find-and-range.qmd) — string search and line display
+- [Reference](reference.qmd) — complete option documentation
+- [Caveats & Limitations](articles/caveats.qmd) — known edge cases

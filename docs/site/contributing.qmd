@@ -1,0 +1,77 @@
+---
+title: "Contributing"
+subtitle: "How to report bugs, suggest features, and contribute to do2screen."
+---
+
+## Reporting bugs
+
+If you find a bug, please [open an issue on GitHub](https://github.com/randrescastaneda/do2screen/issues). Include:
+
+1. The version of `do2screen` you have installed (`which do2screen`)
+2. Your Stata version (`cret list` → look for `c(version)`)
+3. A minimal do-file that reproduces the problem
+4. The command you ran and the output you got (or expected)
+
+---
+
+## Suggesting features
+
+Feature suggestions are welcome via [GitHub Issues](https://github.com/randrescastaneda/do2screen/issues). Please describe:
+
+- **The problem** you are trying to solve (not just the proposed solution)
+- **An example do-file** where the current behavior falls short
+- What output you would expect
+
+---
+
+## Development setup
+
+**Requirements:**
+
+- Stata 16.1 or higher
+- A clone of the repository
+
+**Clone the repository:**
+
+```bash
+git clone https://github.com/randrescastaneda/do2screen.git
+cd do2screen
+```
+
+**Run the test suite:**
+
+```stata
+do "tests/run_tests.do"
+```
+
+The test runner compares output against golden files in `tests/golden/`. All tests should pass before submitting a pull request.
+
+**Adding a new golden test:**
+
+1. Add your example do-file to `tests/examples/`
+2. Capture expected output in `tests/golden/` (use `capture_golden.do`)
+3. Register the test in `tests/run_tests.do`
+
+---
+
+## Code style
+
+- Use `///` for line continuation
+- Use `local` macros for all intermediate values
+- Add a `*! Version X.Y <date>` header to any `.ado` file you modify
+- Keep sub-programs in separate `_do2screen_*.ado` files
+- Document public options in `do2screen.sthlp`
+
+---
+
+## License
+
+`do2screen` is released under the [MIT License](https://github.com/randrescastaneda/do2screen/blob/master/LICENSE). Contributions are accepted under the same license.
+
+---
+
+## Authors
+
+**R. Andres Castaneda** — The World Bank ([acastanedaa@worldbank.org](mailto:acastanedaa@worldbank.org))
+
+**Santiago Garriga** — Universidad Nacional de La Plata ([garrigasantiago@gmail.com](mailto:garrigasantiago@gmail.com))
