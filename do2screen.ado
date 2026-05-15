@@ -232,12 +232,13 @@ exit
 * =============================================================================
 * History
 * =============================================================================
-*! Version 4.0    <12may2026>  modular rewrite; version 16.1; drop lstrfun
-*! Version 3.0    <13dec2017>
-*! Version 2.4    <20nov2017>
-*! Version 2.3    <23sep2017>
-*! Version 2.2    <15aug2017>
-*! Version 2.1    <26Apr2016>
-*! Version 2.0    <29Dec2015>
-*! Version 1.1    <05Mar2015>
-*! Version 0.0    <06Feb2015>
+*! Version 0.5.0    <15may2026>  
+*! Version 0.4.0    <12may2026>  modular rewrite; version 16.1; drop lstrfun
+*! Version 0.3.0    <13dec2017>
+*! Version 0.2.4    <20nov2017>
+*! Version 0.2.3    <23sep2017>
+*! Version 0.2.2    <15aug2017>
+*! Version 0.2.1    <26Apr2016>
+*! Version 0.2.0    <29Dec2015>
+*! Version 0.1.1    <05Mar2015>
+*! Version 0.0.0.9000    <06Feb2015>

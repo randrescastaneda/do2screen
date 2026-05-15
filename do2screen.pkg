@@ -1,6 +1,18 @@
-v 3
-d 'DO2SCREEN'
+v 0.5.0
+d 'DO2SCREEN': do2screen
 d 
-d Distribution-Date: 20feb2019
+d Stata package that allows the user to review specific sections of a particular do-file, or set of do-files, directly in the Stata console.
+d 
+d Distribution-Date:   20260515
 d License: MIT
 d 
+F _do2screen_aftervar.ado
+F _do2screen_delimit.ado
+F _do2screen_display.ado
+F _do2screen_find.ado
+F _do2screen_parse.ado
+F _do2screen_range.ado
+F _do2screen_return.ado
+F _do2screen_vartrack.ado
+F do2screen.ado
+F do2screen.sthlp

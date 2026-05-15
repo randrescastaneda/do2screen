@@ -1,7 +1,8 @@
-v 3
-d Materials by R.Andres Castaneda
-d 
-d 
-d 
- 
+v 0.5.0
+d Authors:
+d  -- R.Andres Castaneda, The World Bank (acastanedaa@worldbank.org)
+d  -- Santiago Garriga, Universidad de La Plata (garrigasantiago@gmail.com)
+
+d 'do2screen': Stata package that allows the user to review specific sections of a particular do-file, or set of do-files, directly in the Stata console.
+
 p do2screen
