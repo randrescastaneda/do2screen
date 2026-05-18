@@ -4,10 +4,7 @@ subtitle: "Review any section of your Stata do-file, right in the console."
 format:
   html:
     toc: false
-    page-layout: custom
 ---
-
-::: {.column-page}
 
 ::: {.hero-banner .text-center style="padding: 3rem 1rem 2rem;"}
 # do2screen <span style="font-size:0.5em; color:#6c757d;">v5.0</span>
@@ -107,5 +104,3 @@ net install do2screen, ///
 Developed by [R. Andres Castaneda](mailto:acastanedaa@worldbank.org) (The World Bank) and [Santiago Garriga](mailto:garrigasantiago@gmail.com) (Universidad Nacional de La Plata).
 
 Licensed under the [MIT License](https://github.com/randrescastaneda/do2screen/blob/master/LICENSE).
-
-:::
